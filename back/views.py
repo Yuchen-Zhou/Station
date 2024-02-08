@@ -24,12 +24,23 @@ def infoSys(request):
     email = user.email
     user_folder = os.path.join(settings.MEDIA_ROOT, str(user.email))  # 根据用户ID创建用户文件夹路径
 
-    # 如果用户文件夹不存在，将创建创建用户文件夹以及海洋生物图像文件夹、海洋生态研究文献文件夹、目标检测模型文件夹、生态数据文件夹
+    # 如果用户文件夹不存在，将创建创建用户文件夹以及海洋生物图像文件夹、海洋生态研究文献文件夹、目标检测模型文件夹
+    user_folder = os.path.join(settings.MEDIA_ROOT, str(user.email))  # 根据用户ID创建用户文件夹路径
+    image_folder = os.path.join(user_folder, '海洋生物图像')   # 在用户根目录下创建生物图像文件夹
+    literature_folder = os.path.join(user_folder, '海洋生态研究')   # 在用户根目录下创建海洋生态研究文件夹
+    object_model_folder = os.path.join(user_folder, '目标检测模型')   # 在用户根目录下创建目标检测模型文件夹
+
     if not os.path.exists(user_folder):
-        os.makedirs(user_folder)  # 如果用户文件夹不存在，创建用户文件夹
+        create_folder([user_folder, image_folder, literature_folder, object_model_folder])
+
+    user_files = os.listdir(user_folder)
 
 
     return render(request, 'html/infoSys.html')
+
+def create_folder(folders):
+    for folder in  folders:
+        os.makedirs(folder)
 
 
 """
