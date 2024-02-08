@@ -1,0 +1,32 @@
+{% extends 'html/base_dashboard.html' %}
+{% load static %}
+{% block title %}图片识别结果{% endblock %}
+{% block otherstyle %}
+    <link rel="stylesheet" href="{% static 'css/detect_res.css' %}">
+    <script src="{% static 'js/csrf.js' %}"></script>
+{% endblock %}
+{% block top_name %}海洋生物图片识别结果{% endblock %}
+
+{% block content %}
+    <table>
+        <tr>
+            <th>图片</th>
+            <th>目标检测结果</th>
+        </tr>
+        {% for result in detection_results %}
+            <tr>
+                <td><img src="{{ '/root/autodl-tmp/Station/media/' }}{{ result.image }}" alt="{{ result.image }}"
+                         width="300" height="200"></td>
+                <td>
+                    <p><strong>图片名:</strong> {{ result.image }}</p>
+                    <p><strong>检测生物:</strong> {{ result.species }}</p>
+                    <p><strong>生物种类个数:</strong> {{ result.numbers }}</p>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+
+{% endblock %}
+{% block extrasrcipt %}
+
+{% endblock %}

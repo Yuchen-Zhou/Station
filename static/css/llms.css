@@ -1,0 +1,56 @@
+/* 聊天框的样式 */
+#chat-container {
+    background-color: rgba(255, 255, 255, 0.9); /* 使用 RGBA 颜色表示法设置不透明度 */
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
+}
+
+
+chat-log {
+    max-height: 400px;
+    overflow-y: auto;
+    margin-bottom: 20px;
+}
+
+/* 聊天输入框样式 */
+.chat-input {
+    display: flex;
+    flex-direction: column; /* 将子元素排列成垂直方向 */
+}
+
+.input-container {
+    display: flex;
+    align-items: center; /* 垂直居中 */
+}
+
+#user-input {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    flex: 1; /* 让输入框占据剩余空间 */
+}
+
+#user-input:focus {
+    outline: none; /* 移除输入框的聚焦时的边框 */
+}
+
+button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-left: 10px; /* 添加左边距 */
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+h1 {
+    color: yellow; /* 设置标题颜色为海军蓝色 */
+    /* 如果您希望应用其他样式，可以在这里添加 */
+}

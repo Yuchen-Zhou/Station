@@ -1,0 +1,57 @@
+body{
+    background-image: url('../img/face.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+    z-index: -1;
+}
+
+/* button.css */
+.button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 60px;
+    background-color: #4CAF50; /* 按钮背景颜色 */
+    border: none;
+    color: #fff; /* 按钮文本颜色 */
+    text-decoration: none;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px; /* 圆角 */
+    overflow: hidden; /* 隐藏溢出的内容 */
+    position: relative;
+}
+
+.button:hover {
+    background-color: #45a049; /* 鼠标悬停时的背景颜色 */
+}
+
+.button:after {
+    content: "";
+    background: #fff;
+    display: block;
+    position: absolute;
+    z-index: -1;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    transform: scaleX(0);
+    transform-origin: 0 50%;
+    transition: transform 0.3s ease;
+}
+
+.button:hover:after {
+    transform: scaleX(1);
+    transform-origin: 100% 50%;
+}
+
+.button a {
+    display: block;
+    text-align: center;
+    padding: 10px;
+}
+
+
+

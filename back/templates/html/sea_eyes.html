@@ -1,0 +1,20 @@
+{% extends 'html/base_dashboard.html' %}
+{% block title %}海洋视觉{% endblock %}
+{% block top_name %}海洋视觉{% endblock %}
+
+{% block content %}
+    <h1>欢迎来到基于深度学习的海洋视觉平台</h1>
+    <p>海洋视觉是一个致力于海洋科学研究的平台，提供图片识别、视频检测和图像重构等功能。以下是一些示例图片：</p>
+    <div class="image-container">
+        <img src="https://via.placeholder.com/150" alt="Sample Image 1">
+        <img src="https://via.placeholder.com/150" alt="Sample Image 2">
+        <img src="https://via.placeholder.com/150" alt="Sample Image 3">
+    </div>
+
+    <div class="centered-container">
+        <h1>请选择你要使用的功能: </h1>
+        <a href="{% url 'upload_images' %}" class="btn">图片识别</a>
+        <a href="{% url 'upload_videos' %}" class="btn">视频检测</a>
+        <a href="#" class="btn">图片识别</a>
+    </div>
+{% endblock %}

@@ -1,0 +1,64 @@
+{% extends 'html/base_index.html' %}
+{% load static %}
+{% block title %}欢迎来到海洋监测平台{% endblock %}
+{% block extra_head %}
+    <link rel="stylesheet" href="{% static 'css/register.css' %}">
+    <script src="{% static 'js/csrf.js' %}"></script>{% endblock %}
+{% block content %}
+    <div class="content">
+        <div id="registration">
+            <h2>欢迎来到海洋生态环境检测平台</h2>
+            <form id="registration_form" method="post" action="{% url 'register' %}">
+                <!-- 注册表单字段 -->
+                {% csrf_token %}
+                <input type="text" id="username" name="username" placeholder="用户名" required><br>
+                <input type="email" id="email" name="email" placeholder="邮箱" required><br>
+                <input type="password" id="password" name="password" placeholder="密码" required><br>
+
+                <input type="submit" value="注册">
+            </form>
+            <p>已经有账号了？<a href="{% url 'login' %}">立即登录</a></p>
+        </div>
+    </div>
+{% endblock %}
+{% block extra_script %}
+    <script>
+        document.getElementById('registration_form').addEventListener('submit', function (event) {
+            event.preventDefault(); // 阻止表单默认提交行为
+
+            // 获取表单数据
+            var formData = new FormData(this);
+
+            // 使用 fetch 发送 POST 请求
+            fetch("{% url 'register' %}", {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRFToken': window.csrfToken // 添加 CSRF token 到请求头部
+                }
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('网络有问题，请重新尝试注册')
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    // 处理后端返回的数据
+                    if (data.success) {
+                        // 如果注册成功，可以执行登录跳转
+                        console.log('注册成功成功');
+                        alert(data.success)
+                        window.location.href = '/dashboard'; // 跳转到控制台
+                    } else {
+                        // 如果注册失败，显示错误信息
+                        console.error('Registration failed:', data.error);
+                        alert(data.error); // 使用 alert 弹出错误信息
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        });
+    </script>
+{% endblock %}

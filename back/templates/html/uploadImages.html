@@ -1,0 +1,27 @@
+{% extends 'html/base_dashboard.html' %}
+{% load static %}
+{% block title %}图片识别{% endblock %}
+{% block otherstyle %}
+    <link rel="stylesheet" href="{% static 'css/uploadImages.css' %}">
+    <script src="{% static 'js/csrf.js' %}"></script>
+{% endblock %}
+{% block top_name %}海洋生物图片识别{% endblock %}
+
+{% block content %}
+    <form action="{% url 'upload_images' %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <label for="images">选择要上传的图片:</label>
+        <input type="file" id="images" name="images" accept="image/*" multiple required>
+        <br><br>
+        <h2>
+            <span>{{ msg }}</span>
+        </h2>
+        <input type="submit" value="上传图片">
+        <input type="submit" onclick="viewDetectResults()" value="查看检测结果">
+    </form>
+
+    <div id="preview"></div>
+{% endblock %}
+{% block extrasrcipt %}
+    <script src="{% static 'js/uploadImages.js' %}"></script>
+{% endblock %}

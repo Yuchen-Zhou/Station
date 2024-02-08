@@ -1,0 +1,180 @@
+/* 侧边栏链接的样式 */
+.sidebar a {
+    padding: 10px; /* 调整按钮的内边距 */
+    text-decoration: none;
+    color: white;
+    display: block;
+    text-align: center; /* 文本居中 */
+    overflow: hidden; /* 隐藏超出部分的内容 */
+    white-space: nowrap; /* 禁止换行 */
+}
+
+/* 侧边栏链接中的图片样式 */
+.sidebar a img {
+    width: 20px; /* 设置图片宽度 */
+    height: auto; /* 根据宽度自动调整高度 */
+}
+
+/* 侧边栏链接的悬停效果 */
+.sidebar a:hover {
+    background-color: #555;
+}
+
+/* 侧边栏展开时显示链接文字 */
+.sidebar.expanded a {
+    padding: 10px 15px; /* 侧边栏展开时调整按钮的内边距 */
+}
+
+/* 侧边栏的样式 */
+.sidebar {
+    height: 100%;
+    width: 20px; /* 侧边栏的初始宽度 */
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: #333;
+    overflow-x: hidden;
+    transition: width 0.5s; /* 侧边栏宽度的过渡效果 */
+    z-index: 2; /* 设置比顶部栏更高的 z-index */
+}
+
+/* 侧边栏链接的样式 */
+.sidebar a {
+    padding: 5px 15px;
+    text-decoration: none;
+    font-size: 16px;
+    color: white;
+    display: block;
+}
+
+/* 侧边栏链接的悬停效果 */
+.sidebar a:hover {
+    background-color: #555;
+}
+
+/* 头像容器的样式 */
+.avatar-container {
+    height: 80%;
+    padding: 10px; /* 头像容器的内边距 */
+    width: 100%; /* 头像容器宽度占满侧边栏 */
+    box-sizing: border-box; /* 设置内边距和边框宽度不会增加元素的宽度 */
+    text-align: center; /* 文本居中 */
+}
+
+.avatar-container img {
+    width: 32px; /* 头像宽度 */
+    height: 32px; /* 头像高度 */
+    border-radius: 50%; /* 圆形头像 */
+}
+
+/* 用户名的样式 */
+.avatar-container .font-semibold {
+    margin-top: 5px; /* 用户名顶部间距 */
+    font-size: 14px; /* 用户名字体大小 */
+    color: white; /* 用户名颜色 */
+}
+
+/* 用户头像的悬停效果 */
+.avatar-container:hover {
+    background-color: #555; /* 悬停时背景颜色变化 */
+}
+
+
+/* 顶部栏的样式 */
+.top-bar {
+    position: fixed;
+    top: 0;
+    left: 20px; /* 将左边距设置为侧边栏的宽度 */
+    width: calc(100% - 50px); /* 顶部栏宽度减去侧边栏的宽度 */
+    background-color: #333; /* 将背景色设置为与侧边栏相同的颜色 */
+    padding: 0.5px 10px;
+    color: white; /* 设置字体颜色为白色 */
+    z-index: 3; /* 确保顶部栏显示在侧边栏和内容区域上方 */
+    transition: left 0.5s, width 0.5s; /* 顶部栏位置和宽度的过渡效果 */
+}
+
+/* 背景图片填充整个页面 */
+html {
+    background-image: url('../img/face.jpg'); /* 设置背景图片 */
+    background-size: cover; /* 让背景图片充满整个页面 */
+    background-position: center; /* 居中显示背景图片 */
+    background-attachment: fixed; /* 确保背景图片固定在视口中 */
+    margin: 0; /* 清除默认的页面边距 */
+    padding: 0; /* 清除默认的页面内边距 */
+}
+
+/* 内容区域的样式 */
+.content {
+    margin-left: 50px; /* 调整边距以适应侧边栏 */
+    padding: 120px;
+    transition: margin-left 0.5s; /* 内容区域左边距的过渡效果 */
+    z-index: 1; /* 确保内容区域在侧边栏下方 */
+    text-align: center; /* 文本居中 */
+    font-family: Arial, sans-serif; /* 设置字体 */
+}
+
+/* 内容区域标题的样式 */
+.content h1 {
+    font-size: 28px; /* 调整标题字体大小 */
+    margin-bottom: 20px; /* 调整标题下边距 */
+}
+
+/* 内容区域正文的样式 */
+.content p {
+    font-size: 18px; /* 调整正文字体大小 */
+    line-height: 1.6; /* 设置行高 */
+}
+
+/* 图片样式 */
+.image-container {
+    margin-top: 20px; /* 上边距 */
+    display: flex; /* 将图片水平居中 */
+    justify-content: center;
+}
+
+.image-container img {
+    max-width: 100%; /* 图片最大宽度为100% */
+    height: auto; /* 根据宽度自动调整高度 */
+    margin: 0 10px; /* 图片间距 */
+}
+
+
+.button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-left: 10px; /* 添加左边距 */
+}
+
+.button:hover {
+    background-color: #0056b3;
+}
+
+/* 链接容器样式 */
+.link-content {
+    display: flex;
+    align-items: center;
+}
+
+/* 图标样式 */
+.link-content img {
+    width: 24px; /* 设置图标宽度 */
+    height: 24px; /* 设置图标高度 */
+    margin-right: 10px; /* 调整图标与文字之间的间距 */
+}
+
+/* 文字样式 */
+.link-content span {
+    color: #333; /* 设置文字颜色 */
+}
+
+/* 一级标题样式 */
+.first-level {
+    font-weight: bold; /* 加粗字体 */
+    color: #333; /* 设置字体颜色 */
+    margin-bottom: 10px; /* 调整与下一个链接之间的间距 */
+}

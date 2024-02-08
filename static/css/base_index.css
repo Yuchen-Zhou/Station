@@ -1,0 +1,132 @@
+/* 样式可以根据需要进行调整 */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    background-color: #f5f5f5; /* 添加背景颜色 */
+}
+
+.video-background {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    overflow: hidden;
+    z-index: -1;
+}
+
+.video-background video {
+    min-width: 100%;
+    min-height: 100%;
+    width: auto;
+    height: auto;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.control-button {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #333;
+    color: #fff;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    z-index: 1;
+    transition: background-color 0.3s; /* 添加过渡效果 */
+}
+
+.control-button:hover {
+    background-color: #555; /* 鼠标悬停时的背景色变化 */
+}
+
+nav {
+    background-color: rgba(0, 0, 0, 0.7); /* 透明黑色背景 */
+    color: #fff;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1;
+    transition: background-color 0.3s; /* 添加过渡效果 */
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+}
+
+nav ul li {
+    margin-right: 20px;
+    transition: transform 0.3s; /* 添加过渡效果 */
+}
+
+nav ul li:last-child {
+    margin-right: 0;
+}
+
+nav ul li a {
+    color: #fff;
+    text-decoration: none;
+    transition: color 0.3s; /* 添加过渡效果 */
+}
+
+nav ul li a:hover {
+    color: #ccc; /* 鼠标悬停时的颜色变化 */
+}
+
+.content {
+    padding: 20px;
+    text-align: center;
+    z-index: 1;
+    position: relative;
+    margin-top: 60px; /* 避免内容被导航栏遮挡 */
+}
+
+.login-register-btn {
+    background-color: rgba(255, 255, 255, 0.5);
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* 关于我们链接样式 */
+.about-us {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    color: white;
+    text-decoration: none; /* 去除下划线 */
+    font-size: 14px; /* 调整字体大小 */
+    transition: color 0.3s; /* 添加过渡效果 */
+}
+
+/* 鼠标悬停时颜色变化 */
+.about-us:hover {
+    color: yellow;
+}
+
+/* 透明框效果 */
+.about-us::before {
+    content: '';
+    position: absolute;
+    top: -5px; /* 调整透明框位置 */
+    left: -5px;
+    right: -5px;
+    bottom: -5px;
+    border: 1px solid rgba(255, 255, 255, 0.5); /* 添加透明边框 */
+    border-radius: 5px; /* 添加圆角 */
+    pointer-events: none; /* 防止透明框干扰链接的点击 */
+}

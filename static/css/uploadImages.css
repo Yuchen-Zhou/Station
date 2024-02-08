@@ -1,0 +1,6 @@
+.thumbnail {
+    max-width: 640px; /* 设置预览图片的最大宽度 */
+    max-height: 200px; /* 设置预览图片的最大高度 */
+    margin: 5px; /* 设置图片之间的间距 */
+}
+

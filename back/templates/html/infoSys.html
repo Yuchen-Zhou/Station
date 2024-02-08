@@ -1,0 +1,24 @@
+{% extends 'html/base_infoSys.html' %}
+{% load static %}
+{% block title %}海洋信息综合管理{% endblock %}
+{% block otherstyle %}
+{% endblock %}
+{% block card_header %}        我的文件系统 - {{ current_folder }}
+{% endblock %}
+
+{% block card_body %}
+    {% if user_files %}
+        <!-- 显示用户上传的文件列表 -->
+        <ul>
+            {% for file in user_files %}
+                <li>{{ file.file_name }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <!-- 提示用户当前没有文件 -->
+        <p>当前没有上传的文件</p>
+    {% endif %}
+{% endblock %}
+{% block extrasrcipt %}
+
+{% endblock %}

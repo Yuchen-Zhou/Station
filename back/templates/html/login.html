@@ -1,0 +1,72 @@
+{% extends 'html/base_index.html' %}
+{% load static %}
+{% block title %}欢迎回到海洋监测平台{% endblock %}
+{% block extra_head %}
+    <link rel="stylesheet" href="{% static 'css/register.css' %}">
+    <script src="{% static 'js/csrf.js' %}"></script>
+{% endblock %}
+{% block content %}
+    <div class="content">
+    <div id="login" style="display: block;">
+        <h2>欢迎回来</h2>
+        <form id="login_form" method="post" action="{% url 'login' %}">
+            <!-- 登录表单字段 -->
+            {% csrf_token %}
+            <input type="email" id="login_email" name="email" placeholder="邮箱" required><br>
+            <input type="password" id="login_password" name="password" placeholder="密码" required><br>
+            <input type="submit" value="登录">
+
+        </form>
+        <p>还没有账号？<a href="{% url 'register' %}">立即注册</a></p>
+    </div>
+
+{% endblock %}
+{% block extra_script %}
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const loginForm = document.getElementById('login_form');
+
+            loginForm.addEventListener('submit', function (event) {
+                event.preventDefault(); // 阻止表单默认提交行为
+
+                const formData = new FormData(loginForm);
+
+                fetch(loginForm.action, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': window.csrfToken // 获取在HTML中定义的CSRF token
+                    },
+                    body: formData
+                })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('网络有问题，请重新尝试登录');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        // 处理后端返回的数据
+                        if (data.success) {
+                            // 如果登录成功，可以执行跳转等操作
+                            console.log('Login successful');
+                            alert("登录成功，正在跳转至控制台...");
+                            window.location.href = '/dashboard'; // 跳转到控制台页面
+                        } else {
+                            // 如果登录失败，显示错误消息
+                            console.error('Login failed:', data.error);
+                            // 例如，在页面上显示错误消息
+                            const errorMessageElement = document.getElementById('login-error-message');
+                            if (errorMessageElement) {
+                                errorMessageElement.textContent = data.error;
+                            }
+                            alert(data.error);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        // 处理其他错误情况，如网络错误
+                    });
+            });
+        });
+    </script>
+{% endblock %}
