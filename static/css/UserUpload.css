@@ -1,0 +1,44 @@
+/* 链接的悬停样式 */
+ul li a:hover {
+    background-color: #f0f0f0; /* 悬停时的背景颜色 */
+    color: #333; /* 悬停时的文字颜色 */
+}
+
+/* 文件列表容器样式 */
+.file-list-container {
+    height: 3000px; /* 表格容器高度100%视口高度 */
+
+    max-height: 200px; /* 设置最大高度 */
+    overflow-y: auto; /* 添加垂直滚动条 */
+}
+
+/* 文件表格的样式 */
+.file-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+/* 文件表头样式 */
+.file-header th {
+    background-color: #f2f2f2;
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+/* 文件条目样式 */
+.file-item {
+    border-bottom: 1px solid #ddd; /* 添加分隔线 */
+}
+
+/* 文件条目悬停样式 */
+.file-item:hover {
+    background-color: #f0f0f0; /* 添加悬停背景色 */
+}
+
+/* 文件信息列样式 */
+.file-table td {
+    padding: 10px;
+    vertical-align: top; /* 设置内容垂直居中 */
+}
+

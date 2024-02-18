@@ -6,8 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}{% endblock %}</title>
 
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+
     <link rel="stylesheet" href="{% static 'css/base_infoSys.css' %}">
     {% block otherstyle %}{% endblock %}
 
@@ -29,7 +29,7 @@
                         class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">数据预处理</a>
+                <a class="nav-link" href="{% url 'dashboard' %}">控制台</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="#">模型管理</a>
@@ -37,79 +37,39 @@
             <li class="nav-item">
                 <a class="nav-link" href="#">回收站</a>
             </li>
+
         </ul>
-        <form class="form-inline my-2 my-lg-0">
-            <div class="input-group">
-                <input class="form-control mr-sm-2" type="search" placeholder="在云端硬盘中搜索" aria-label="Search">
-                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">搜索</button>
-            </div>
-        </form>
-        <div class="user-info">
-            <button type="button" class="btn btn-link user-avatar" data-toggle="popover" title="用户信息"
-                    data-content="这里是用户详细信息" id="popover-trigger">
-                <img src="{% static 'img/default_user.png' %}" alt="User Avatar" class="user-avatar" id="UserAvatar">
-            </button>
-            <!-- 气泡内容放置在外部，方便后续控制显示与隐藏 -->
-            <div class="popover" id="popover-content">
-                <span>用户名</span>
-                <a href="#">上传文献</a>
-            </div>
-        </div>
 
-
+        <!-- 用户信息按钮 -->
+        <button type="button" class="btn btn-link user-avatar" id="popover-trigger">
+            <img src="{% static 'img/default_user.png' %}" alt="User Avatar" class="user-avatar" id="UserAvatar">
+            <span><a href="{% url 'personal' %}">{{ User_info.UserName }}</a></span>
+        </button>
     </div>
+
+
 </header>
 
 <main class="container-fluid">
     <div class="row">
         <div class="col-md-3">
-            <div class="new-button">
-                <button class="btn btn-primary" id="newButton">新建</button>
-                <div class="popover" id="popover">
-                    <button id="uploadButton">上传图片</button>
-                    <input type="file" id="imageInput" multiple style="display: none;">
-                </div>
+            <!-- 上传按钮 -->
+            <button class="btn btn-primary mt-3" id="uploadButton">上传图片</button>
+            <input type="file" id="fileInput" style="display: none;" multiple>
 
-                <div class="modal fade" id="createFolderModal" tabindex="-1" role="dialog"
-                     aria-labelledby="createFolderModalLabel" aria-hidden="true">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="createFolderModalLabel">创建新文件夹</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div class="modal-body">
-                                <input type="text" id="folderNameInput" class="form-control"
-                                       placeholder="请输入文件夹名称">
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
-                                <button type="button" class="btn btn-primary" id="createFolderBtn">创建</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+        </div>
 
-            </div>
 
-            <div id="uploadProgress"
-                 style="position: fixed; bottom: 20px; right: 20px; background-color: #ccc; width: 200px; height: 20px;">
-                <div id="progressBar" style="height: 100%; background-color: #007bff; width: 0;"></div>
-                <span id="progressText"
-                      style="position: absolute; top: 0; right: 5px; font-size: 12px; color: #000;">0%</span>
-
-            </div>
+        <div class="card-container">
             <div class="card mt-3">
                 <div class="card-header">
                     存储空间
                 </div>
                 <div class="card-body">
-                    已使用 561.8MB / 15 GB
+                    已使用 {{ User_info.UserUsed }}{{ User_info.UserUsedSignal }}
+                    / {{ User_info.UserStorage }}GB, {{ User_info.UserPercentage }}%
                     <div class="progress">
-
-                        <span class="sr-only">已完成 37%</span>
+                        <span class="sr-only">已完成</span>
                     </div>
                 </div>
             </div>
@@ -128,6 +88,9 @@
         </div>
     </div>
 </main>
+
+
+<br><br><br><br><br><br><br><br><br><br><br><br><br>
 <footer class="footer">
     <div class="container">
         <p class="text-muted">
@@ -135,28 +98,50 @@
         </p>
     </div>
 </footer>
-<script src="{% static 'js/show_new.js' %}"></script>
-<script src="{% static 'js/uploadImages_sys.js' %}"></script>
-<script>
-    document.getElementById("createFolderBtn").addEventListener("click", function () {
-        var folderName = document.getElementById("folderNameInput").value;
-        // 发送Ajax请求到后端创建文件夹
-        // 这里假设使用jQuery发送Ajax请求
-        $.ajax({
-            url: "{% url 'create_folder' %}",
-            type: "POST",
-            data: {folder_name: folderName},
-            success: function (response) {
-                // 处理成功创建文件夹后的操作，例如刷新页面
-                location.reload();
-            },
-            error: function (xhr, status, error) {
-                // 处理错误情况
-                console.error(error);
-            }
+
+{% block extra_script %}
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // 获取上传按钮和文件输入框
+            var uploadButton = document.getElementById("uploadButton");
+            var fileInput = document.getElementById("fileInput");
+
+            // 监听上传按钮点击事件
+            uploadButton.addEventListener("click", function () {
+                // 触发文件输入框的点击事件
+                fileInput.click();
+            });
+
+            // 监听文件输入框的change事件
+            fileInput.addEventListener("change", function () {
+                // 获取选中的文件列表
+                var files = fileInput.files;
+
+                // 创建FormData对象
+                var formData = new FormData();
+
+                // 将每个选中的文件添加到FormData中
+                for (var i = 0; i < files.length; i++) {
+                    formData.append("files[]", files[i]);
+                }
+
+                // 发送文件到后端处理
+                var xhr = new XMLHttpRequest();
+                xhr.setRequestHeader('X-CSRFToken', document.getElementsByName('csrfmiddlewaretoken')[0].value);
+                xhr.open("POST", "/infoSys/UserImages", true);
+                xhr.onload = function () {
+                    if (xhr.status === 200) {
+                        // 上传成功
+                        console.log("文件上传成功");
+                    } else {
+                        // 上传失败
+                        console.error("文件上传失败");
+                    }
+                };
+                xhr.send(formData);
+            });
         });
-    });
-</script>
-{% block extra_script %}{% endblock %}
+    </script>
+{% endblock %}
 </body>
 </html>

@@ -1,171 +1,173 @@
-/* 引入 Google Fonts 中的 Roboto 字体 */
+/* 自定义字体 */
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
 
-/* Bootstrap 样式 */
-/* 以下是 Bootstrap 的一些基本样式，你可以根据需要进行定制 */
+/* Reset 样式，确保页面在不同浏览器中的一致性 */
+html,
+body,
+div,
+span,
+applet,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+strong,
+sub,
+sup,
+tt,
+var,
+b,
+u,
+i,
+center,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+article,
+aside,
+canvas,
+details,
+embed,
+figure,
+figcaption,
+footer,
+header,
+hgroup,
+menu,
+nav,
+output,
+ruby,
+section,
+summary,
+time,
+mark,
+audio,
+video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+}
 
-/* 重置部分标签的默认样式 */
+/* 设置基本的字体和行高 */
 body {
-    font-family: 'Roboto', sans-serif; /* 使用 Roboto 字体作为默认字体 */
-    margin: 0;
-    padding: 0;
+  font-family: 'Roboto', sans-serif;
+  line-height: 1.6;
 }
 
-/* 添加响应式布局的容器 */
+/* 基本的排版样式 */
 .container {
-    width: 100%;
-    max-width: 1200px; /* 设置最大宽度，根据需要调整 */
-    margin: 0 auto; /* 居中显示 */
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 15px;
 }
 
-/* 设置标题样式 */
-h1, h2, h3, h4, h5, h6 {
-    font-weight: 500; /* 使用 500 权重的 Roboto 字体 */
-}
 
-/* 设置按钮样式 */
-.btn {
-    font-weight: 700; /* 使用 700 权重的 Roboto 字体 */
-    padding: 10px 20px; /* 设置按钮的内边距 */
-    border: none;
-    border-radius: 4px; /* 添加圆角 */
-    cursor: pointer;
-}
-
-/* 设置链接样式 */
-a {
-    color: #007bff; /* 设置链接颜色 */
-    text-decoration: none; /* 移除下划线 */
-}
-
-/* 设置导航条样式 */
+/* Navbar 样式 */
 .navbar {
-    background-color: #f8f9fa; /* 设置背景色 */
-    padding: 10px 20px; /* 设置内边距 */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 添加阴影效果 */
+  background-color: #f8f9fa;
+  padding: 10px 0;
 }
 
-/* 设置卡片样式 */
-.card {
-    margin-top: 3%;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 添加阴影效果 */
-    border-radius: 8px; /* 添加圆角 */
-}
-
-/* 设置表格样式 */
-.table {
-    width: 100%;
-    border-collapse: collapse; /* 合并边框 */
-}
-
-.table th, .table td {
-    padding: 8px; /* 设置单元格内边距 */
-    border: 1px solid #dee2e6; /* 添加边框 */
-}
-
-/* 设置页脚样式 */
-.footer {
-    background-color: #f8f9fa; /* 设置背景色 */
-    padding: 20px 0; /* 设置内边距 */
-    text-align: center;
+.navbar-brand {
+  display: inline-block;
+  height: 30px;
 }
 
 .navbar-brand img {
-    /* 设置图片的宽度 */
-    width: 50px; /* 例如，你可以设置合适的宽度 */
-    /* 设置图片的垂直对齐方式 */
-    vertical-align: middle; /* 使图片垂直居中 */
-    /* 添加其他样式，如边框、圆角等 */
+  height: 100%;
 }
 
-.popover {
-    position: absolute;
-    background-color: #fff;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    padding: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    display: none;
+
+.navbar-nav .nav-link {
+  color: #333;
+  margin-right: 20px;
 }
 
-.popover a {
-    display: block;
-    padding: 5px 10px;
-    color: #333;
-    text-decoration: none;
-    transition: background-color 0.3s;
+.navbar-nav .nav-link:hover {
+  color: #007bff;
 }
 
-.popover a:hover {
-    background-color: #f8f9fa;
-}
-
-/* 设置新建按钮样式 */
-.new-button .btn {
-    background: linear-gradient(145deg, #ffffff, #d9d9d9); /* 使用线性渐变创建立体效果 */
-    color: #007bff; /* 设置文字颜色为蓝色 */
-    border: none; /* 移除边框 */
-    font-size: 20px; /* 设置字体大小为20px */
-    padding: 15px 30px; /* 设置内边距 */
-    border-radius: 30px; /* 设置边框圆角半径，使按钮呈现曲边矩形 */
-    position: relative; /* 设置相对定位 */
-    overflow: hidden; /* 隐藏溢出部分 */
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); /* 添加立体效果的阴影 */
-    transition: transform 0.2s ease; /* 添加过渡效果 */
-    margin-top: 10%;
-}
-
-.new-button .btn:hover {
-    background-color: #f8f9fa; /* 设置鼠标悬停时的背景色 */
-}
-
-.popover a {
-    color: #333;
-}
-
-.form-inline {
+.navbar-nav {
     display: flex;
-    justify-content: center;
+    align-items: center;
 }
 
-.form-inline .input-group {
-    margin-right: auto; /* 将搜索表单向左对齐 */
-    margin-left: auto; /* 将搜索表单向右对齐 */
+.navbar-nav .nav-item {
+    margin-right: 20px; /* 调整链接之间的间距 */
 }
 
-/* 用户信息样式 */
 .user-info {
     display: flex;
     align-items: center;
-    margin-left: 20px; /* 调整用户信息与搜索框之间的间距 */
 }
 
-.user-avatar {
-    width: 40px; /* 用户头像宽度 */
-    height: 40px; /* 用户头像高度 */
-    border-radius: 50%; /* 将头像设置为圆形 */
-    margin-right: 10px; /* 调整头像与用户名之间的间距 */
+
+/* Card 样式 */
+.card {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-bottom: 20px;
 }
 
-.user-name {
-    font-weight: bold; /* 设置用户名粗体 */
+.card-header {
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #ccc;
+  padding: 10px 15px;
 }
 
-.user-avatar {
-    padding: 0; /* 移除按钮的内边距 */
-    background-color: transparent; /* 移除按钮的背景色 */
-    border: none; /* 移除按钮的边框 */
+.card-body {
+  padding: 15px;
 }
 
-.popover-header {
-    font-weight: bold; /* 设置气泡标题为粗体 */
-}
-
-.popover-body {
-    max-width: 200px; /* 设置气泡内容的最大宽度 */
-}
-
-/* 显示多选文件功能 */
-input[type="file"] {
-    display: inline;
+/* Footer 样式 */
+.footer {
+  background-color: #f8f9fa;
+  padding: 20px 0;
+  text-align: center;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
 }

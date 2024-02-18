@@ -7,7 +7,7 @@
 {% endblock %}
 
 {% block card_header %}
-    我的文件系统: {{ User_info.UserEmail }}/
+    我的文件系统: {{ User_info.UserEmail }}/海洋生物图像
 {% endblock %}
 {% block card_body %}
     <div class="file-list-container">
@@ -18,28 +18,27 @@
                 <th>大小</th>
                 <th>类型</th>
                 <th>上传时间</th>
+                <th>所属文件夹</th>
                 <!-- 其他列名 -->
             </tr>
             </thead>
             <tbody>
-            {% for folder in folders %}
+            {% for file in user_files %}
                 <tr class="file-item">
-                    {% if folder.name == '海洋生物图像' %}
-                        <td><a href="{% url 'UserImages' %}">{{ folder.name }}</a></td>
-                    {% else %}
-                        <td>{{ folder.name }}</td>
-                    {% endif %}
-                    <td>{{ folder.size }}B</td>
-                    <td>{{ folder.file_type }}</td>
-                    <td>{{ folder.upload_time }}</td>
+                    <td>{{ file.file_name }}</td>
+                    <td>{{ file.file_size }}</td>
+                    <td>{{ file.file_type }}</td>
+                    <td>{{ file.upload_time }}</td>
+                    <td>{{ file.folder_name|default:"未分类" }}</td>
                     <!-- 其他文件信息 -->
                 </tr>
             {% endfor %}
             </tbody>
         </table>
     </div>
+
 {% endblock %}
 
-
 {% block extrasrcipt %}
+
 {% endblock %}

@@ -9,6 +9,11 @@
     white-space: nowrap; /* 禁止换行 */
 }
 
+
+.sidebar ul {
+    list-style-type: none; /* 去除列表项左侧的点 */
+}
+
 /* 侧边栏链接中的图片样式 */
 .sidebar a img {
     width: 20px; /* 设置图片宽度 */
@@ -32,7 +37,7 @@
     position: fixed;
     top: 0;
     left: 0;
-    background-color: #333;
+    background-color: rgba(0, 0, 0, 0.7);
     overflow-x: hidden;
     transition: width 0.5s; /* 侧边栏宽度的过渡效果 */
     z-index: 2; /* 设置比顶部栏更高的 z-index */
@@ -86,8 +91,8 @@
     top: 0;
     left: 20px; /* 将左边距设置为侧边栏的宽度 */
     width: calc(100% - 50px); /* 顶部栏宽度减去侧边栏的宽度 */
-    background-color: #333; /* 将背景色设置为与侧边栏相同的颜色 */
-    padding: 0.5px 10px;
+    background-color: rgba(0, 0, 0, 0.7);
+    padding: 0.5px 15px;
     color: white; /* 设置字体颜色为白色 */
     z-index: 3; /* 确保顶部栏显示在侧边栏和内容区域上方 */
     transition: left 0.5s, width 0.5s; /* 顶部栏位置和宽度的过渡效果 */
@@ -95,7 +100,7 @@
 
 /* 背景图片填充整个页面 */
 html {
-    background-image: url('../img/face.jpg'); /* 设置背景图片 */
+    background-image: url('../img/dashboard.png'); /* 设置背景图片 */
     background-size: cover; /* 让背景图片充满整个页面 */
     background-position: center; /* 居中显示背景图片 */
     background-attachment: fixed; /* 确保背景图片固定在视口中 */
@@ -138,6 +143,11 @@ html {
     margin: 0 10px; /* 图片间距 */
 }
 
+/* 隐藏类 */
+.hidden {
+    display: none;
+}
+
 
 .button {
     padding: 10px 20px;
@@ -152,29 +162,4 @@ html {
 
 .button:hover {
     background-color: #0056b3;
-}
-
-/* 链接容器样式 */
-.link-content {
-    display: flex;
-    align-items: center;
-}
-
-/* 图标样式 */
-.link-content img {
-    width: 24px; /* 设置图标宽度 */
-    height: 24px; /* 设置图标高度 */
-    margin-right: 10px; /* 调整图标与文字之间的间距 */
-}
-
-/* 文字样式 */
-.link-content span {
-    color: #333; /* 设置文字颜色 */
-}
-
-/* 一级标题样式 */
-.first-level {
-    font-weight: bold; /* 加粗字体 */
-    color: #333; /* 设置字体颜色 */
-    margin-bottom: 10px; /* 调整与下一个链接之间的间距 */
 }

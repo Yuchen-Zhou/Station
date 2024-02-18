@@ -1,0 +1,30 @@
+from datetime import datetime
+
+
+class UserInfo:
+    def __init__(self, username, email, storage, used, used_signal, percentage):
+        self.UserName = username
+        self.UserEmail = email
+        self.UserStorage = storage
+        self.UserUsed = used
+        self.UserUsedSignal = used_signal
+        self.UserPercentage = percentage
+
+
+class File:
+
+    # File参数文件名、文件类型、文件大小、上传时间、上传文件夹
+    def __init__(self, name, file_type, size, upload_time, folder_name=None):
+        self.name = name
+        self.file_type = file_type
+        self.size = size
+        self.upload_time = upload_time
+        self.folder_name = folder_name
+
+
+class Folder:
+    def __init__(self, name, file_type, size, upload_time):
+        self.name = name
+        self.file_type = file_type
+        self.size = size
+        self.upload_time = upload_time

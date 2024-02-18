@@ -29,6 +29,8 @@ class CustomUser(AbstractBaseUser):
     username = models.CharField(max_length=150, blank=True)
     email = models.EmailField(unique=True, primary_key=True)
     is_active = models.BooleanField(default=True)
+    storage = models.PositiveBigIntegerField(default=5)
+    already_use = models.PositiveIntegerField(default=0)
 
     objects = CustomUserManager()
 
