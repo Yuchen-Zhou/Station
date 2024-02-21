@@ -1,3 +1,87 @@
 {% extends 'html/base_dashboard.html' %}
+{% load static %}
 {% block title %}个人中心{% endblock %}
-{% block content %}<h1>个人中心正在开发中。。。敬请期待</h1>{% endblock %}
+{% block otherstyle %}
+    <link rel="stylesheet" href="{% static 'css/personal.css' %}">
+{% endblock %}
+{% block top_name %}个人中心{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="profile-info-container">
+            <section id="profile">
+                <h2>个人资料</h2>
+                <form action="/update-profile/" method="post">
+                    {% csrf_token %}
+                    <div class="profile-info">
+                        <div class="profile-info-item">
+                            <label for="username">用户名：</label>
+                            <input type="text" id="username" name="username" value="{{ User_info.UserName }}">
+                        </div>
+                        <div class="profile-info-item">
+                            <label for="email">邮箱地址：</label>
+                            <input type="email" id="email" name="email" value="{{ User_info.UserEmail }}" readonly>
+                        </div>
+                        <div class="profile-info-item">
+                            <label for="storage">云硬盘空间：</label>
+                            <div class="progress-bar">
+                                <div class="progress" style="width: {{ User_info.UserPercentage }}%;">
+                                    {{ User_info.UserUsed }}{{ User_info.UserUsedSignal }}/{{ User_info.UserStorage }}GB
+                                </div>
+                            </div>
+                            <button class="expand-button">扩容</button>
+                            <br>
+                            <button class="update-storage-button">更新存储空间</button>
+                        </div>
+
+                    </div>
+                    <button type="submit">保存</button>
+                </form>
+            </section>
+        </div>
+
+
+        <div class="account-container">
+            <section id="account-management">
+                <h2>账户管理</h2>
+                <ul>
+                    <li><a href="/change-password/">修改密码</a></li>
+                    <li><a href="/change-email/">修改邮箱</a></li>
+                    <li><a href="/social-accounts/">关联社交账号</a></li>
+                    <li><a href="/delete-account/">删除账号</a></li>
+                </ul>
+            </section>
+        </div>
+
+        <div class="order-container">
+            <section id="order-history">
+                <h2>订单信息</h2>
+                <table>
+                    <thead>
+                    <tr>
+                        <th>订单号</th>
+                        <th>订单状态</th>
+                        <th>订单详情</th>
+                        <th>下单时间</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>123456</td>
+                        <td>已完成</td>
+                        <td>产品名称 x 1</td>
+                        <td>2024-02-21 10:00</td>
+                    </tr>
+                    <!-- More order history rows here -->
+                    </tbody>
+                </table>
+            </section>
+        </div>
+
+        <!-- Other sections (address management, preference settings, security settings, contact customer service) go here -->
+
+    </div>
+{% endblock %}
+{% block extrasrcipt %}
+
+{% endblock %}

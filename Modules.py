@@ -14,10 +14,11 @@ class UserInfo:
 class File:
 
     # File参数文件名、文件类型、文件大小、上传时间、上传文件夹
-    def __init__(self, name, file_type, size, upload_time, folder_name=None):
+    def __init__(self, name, file_type, size, signal, upload_time, folder_name=None):
         self.name = name
         self.file_type = file_type
         self.size = size
+        self.signal = signal
         self.upload_time = upload_time
         self.folder_name = folder_name
 

@@ -23,6 +23,8 @@ def calculate_bytes(bytes):
     elif bytes >= math.pow(1024, 3):
         signal = 'GB'
         bytes = bytes / math.pow(1024, 3)
+
+    bytes = round(bytes, 2)
     return bytes, signal
 
 

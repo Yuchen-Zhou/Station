@@ -83,51 +83,61 @@ time,
 mark,
 audio,
 video {
-  margin: 0;
-  padding: 0;
-  border: 0;
-  font-size: 100%;
-  font: inherit;
-  vertical-align: baseline;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    font: inherit;
+    vertical-align: baseline;
 }
 
 /* 设置基本的字体和行高 */
 body {
-  font-family: 'Roboto', sans-serif;
-  line-height: 1.6;
+    font-family: 'Roboto', sans-serif;
+    line-height: 1.6;
 }
 
 /* 基本的排版样式 */
 .container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 15px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
 }
-
 
 /* Navbar 样式 */
 .navbar {
-  background-color: #f8f9fa;
-  padding: 10px 0;
+    background-color: #f8f9fa;
+    padding: 10px 0;
 }
 
 .navbar-brand {
-  display: inline-block;
-  height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 60px; /* Adjust the height of the navbar brand */
 }
 
 .navbar-brand img {
-  height: 100%;
+    margin: 0 auto; /* Center the image horizontally */
+    height: 40px;
+    width: 40px;
 }
 
+.navbar-toggler {
+    border: none;
+}
+
+.navbar-toggler-icon {
+    background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3e%3cpath stroke='rgba(0, 123, 255, 0.5)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+}
 
 .navbar-nav .nav-link {
-  color: #333;
-  margin-right: 20px;
+    color: #333;
+    margin-right: 20px;
 }
 
 .navbar-nav .nav-link:hover {
-  color: #007bff;
+    color: #007bff;
 }
 
 .navbar-nav {
@@ -136,38 +146,81 @@ body {
 }
 
 .navbar-nav .nav-item {
-    margin-right: 20px; /* 调整链接之间的间距 */
+    margin-right: 5px; /* 调整链接之间的间距 */
 }
 
-.user-info {
+/* Avatar and username styling */
+.user-avatar {
     display: flex;
     align-items: center;
+}
+
+.user-avatar img {
+    max-height: 30px; /* Set the maximum height of the user avatar */
+    width: 30px; /* Set a fixed width for the avatar */
+    border-radius: 50%; /* Make the avatar circular */
+    margin-right: 10px; /* Adjust spacing between avatar and username */
+}
+
+.user-avatar span {
+    margin-right: 10px; /* Adjust spacing between avatar and username */
+}
+
+.user-avatar span a {
+    text-decoration: none; /* Remove underline from the username link */
+    color: #333; /* Set the default color of the username */
+}
+
+/* Hover effect on the username */
+.user-avatar span a:hover {
+    color: #007bff; /* Change the color of the username on hover */
 }
 
 
 /* Card 样式 */
 .card {
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  margin-bottom: 20px;
+    margin-top: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 20px;
 }
 
 .card-header {
-  background-color: #f8f9fa;
-  border-bottom: 1px solid #ccc;
-  padding: 10px 15px;
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #ccc;
+    padding: 10px 15px;
 }
 
+
 .card-body {
-  padding: 15px;
+    height: 500px;
+    padding: 15px;
+}
+
+.card-header2 {
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #ccc;
+    padding: 10px 15px;
+}
+
+
+.card-body2 {
+    padding: 15px;
 }
 
 /* Footer 样式 */
 .footer {
-  background-color: #f8f9fa;
-  padding: 20px 0;
-  text-align: center;
-  position: fixed;
-  bottom: 0;
-  width: 100%;
+    background-color: #f8f9fa;
+    padding: 20px 0;
+    text-align: center;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
 }
+
+.card-container {
+    margin-top: -15%; /* Adjust margin-top as needed */
+    width: 25%; /* Adjust width as needed */
+
+}
+

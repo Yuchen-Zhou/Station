@@ -23,13 +23,13 @@
             </tr>
             </thead>
             <tbody>
-            {% for file in user_files %}
+            {% for file in files %}
                 <tr class="file-item">
-                    <td>{{ file.file_name }}</td>
-                    <td>{{ file.file_size }}</td>
+                    <td>{{ file.name }}</td>
+                    <td>{{ file.size }}{{ file.signal }}</td>
                     <td>{{ file.file_type }}</td>
                     <td>{{ file.upload_time }}</td>
-                    <td>{{ file.folder_name|default:"未分类" }}</td>
+                    <td>{{ file.folder_name}}</td>
                     <!-- 其他文件信息 -->
                 </tr>
             {% endfor %}

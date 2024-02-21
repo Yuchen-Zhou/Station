@@ -6,9 +6,7 @@ ul li a:hover {
 
 /* 文件列表容器样式 */
 .file-list-container {
-    height: 3000px; /* 表格容器高度100%视口高度 */
-
-    max-height: 200px; /* 设置最大高度 */
+    max-height: 480px; /* 设置最大高度 */
     overflow-y: auto; /* 添加垂直滚动条 */
 }
 
@@ -16,14 +14,17 @@ ul li a:hover {
 .file-table {
     width: 100%;
     border-collapse: collapse;
+    table-layout: fixed;
 }
 
 /* 文件表头样式 */
+.file-header td,
 .file-header th {
     background-color: #f2f2f2;
     padding: 10px;
     text-align: left;
     border-bottom: 1px solid #ddd;
+    overflow: hidden;
 }
 
 /* 文件条目样式 */

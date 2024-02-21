@@ -1,5 +1,5 @@
 import os, time, json, sys, cv2, math
-from datetime import timezone
+import datetime
 
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
@@ -20,44 +20,95 @@ video_dir = ''  # 视频保存缓冲区
 海洋信息综合管理
 """
 
+# 更新用户存储空间
+# def upgrate_storage(email):
+#     user_files = UserFile.objects.filter(email=email)
+#     for user_file in user_files:
+#         if user_file.file_name == user_file.folder_name:
+
+
+
+# 设置用户session
+def set_user_session(request):
+    userinfo = CustomUser.objects.filter(email=request.user.email).first()
+
+    # 用户已经使用百分比
+    percentage = userinfo.already_use / 1024 * 1024 * 1024 * userinfo.storage
+    used, signal = calculate_bytes(userinfo.already_use)
+    User_info = UserInfo(userinfo.username, userinfo.email, userinfo.storage, used, signal, percentage)
+
+    request.session['user_info'] = {
+        'userName': User_info.UserName,
+        'userEmail': User_info.UserEmail,
+        'userStorage': User_info.UserStorage,
+        'userUsed': User_info.UserUsed,
+        'userSignal': User_info.UserUsedSignal,
+        'userPercentage': User_info.UserPercentage
+    }
+
+
+
+# 获取用户基本信息
+def get_user_info(request):
+    user_info_session = request.session.get('user_info')
+
+    if user_info_session:
+        User_info = generate_userInfo(user_info_session)
+
+    return User_info
 
 # 信息管理-图像管理
 @login_required
 def infoSys_userImages(request):
-    user_info_seesion = request.session.get('user_info')
+    set_user_session(request)
 
-    if user_info_seesion:
-        User_info = generate_userInfo(user_info_seesion)
+    User_info = get_user_info(request)
 
     # 对上传的文件进行处理
     if request.method == 'POST':
-        uploaded_files = request.FILES.get('files')
+        uploaded_files = request.FILES.getlist('files[]')
+
+        print('有图片上传')
+        print(uploaded_files)
         for uploaded_file in uploaded_files:
+
             user_path = os.path.join(settings.MEDIA_ROOT, User_info.UserEmail)  # 用户根路径
-            file_path = os.path.join(user_path, '海洋生物图像')
+            dir_path = os.path.join(user_path, '海洋生物图像')
+            file_path = os.path.join(dir_path, uploaded_file.name)
+            print(file_path)
             with open(file_path, 'wb') as destination:
                 for chunk in uploaded_file.chunks():
                     destination.write(chunk)
+
+            print(f"文件名：{uploaded_file.name}\n"
+                  f"文件类型：{uploaded_file.content_type}\n"
+                  f"文件大小：{uploaded_file.size}B")
 
             user_file = UserFile(
                 email=User_info.UserEmail,
                 file_name=uploaded_file.name,
                 file_type=uploaded_file.content_type,
                 file_size=uploaded_file.size,
-                upload_time=timezone.now(),
+
+                upload_time=datetime.datetime.now(),
                 folder_name='海洋生物图像',
             )
             user_file.save()
-            return redirect('infoSys_userImages')  # 重定向到当前页面，刷新文件列表
+        return redirect('/infoSys/UserImages')  # 重定向到当前页面，刷新文件列表
 
     files = []
     userfiles = UserFile.objects.filter(email=request.user.email, folder_name='海洋生物图像')
+
     for userfile in userfiles:
+        if userfile.file_name == '海洋生物图像':
+            continue
+        size, signal = calculate_bytes(userfile.file_size)
         file = File(name=userfile.file_name, file_type=userfile.file_type,
-                    size=userfile.file_size, upload_time=userfile.upload_time)
+                    size=size, signal=signal, upload_time=userfile.upload_time,
+                    folder_name=userfile.folder_name)
         files.append(file)
 
-    return render(request, 'html/infoSys_userImages.html', {'User_info': User_info})
+    return render(request, 'html/infoSys_userImages.html', {'User_info': User_info, "files": files})
 
 
 # 信息管理首页
@@ -96,26 +147,10 @@ def infoSys(request):
                             size=userfile.file_size, upload_time=userfile.upload_time)
             folders.append(folder)
 
-    userinfo = CustomUser.objects.filter(email=email).first()
 
-    # 用户已经使用百分比
-    percentage = userinfo.already_use / 1024 * 1024 * 1024 * userinfo.storage
-    used, signal = calculate_bytes(userinfo.already_use)
+    set_user_session(request)
+    User_info = get_user_info(request)
 
-    User_info = UserInfo(userinfo.username, userinfo.email, userinfo.storage, used, signal, percentage)
-
-    request.session['user_info'] = {
-        'userName': User_info.UserName,
-        'userEmail': User_info.UserEmail,
-        'userStorage': User_info.UserStorage,
-        'userUsed': User_info.UserUsed,
-        'userSignal': User_info.UserUsedSignal,
-        'userPercentage': User_info.UserPercentage
-    }
-
-    print(
-        f"这是基本的用户信息,邮箱{User_info.UserEmail},用户名{User_info.UserName}\n"
-        f"存储空间{User_info.UserStorage}GB,已经使用{User_info.UserUsed}{User_info.UserUsedSignal}\n")
 
     return render(request, 'html/infoSys.html', {"folders": folders, "User_info": User_info})
 
@@ -172,7 +207,7 @@ def user_login(request):
         if user is not None:
             # 登录成功，使用login方法登录用户
             login(request, user)
-
+            set_user_session(request)
             return JsonResponse({'success': '登录成功'})
         else:
             # 登录失败，返回错误信息
@@ -199,8 +234,15 @@ def user_logout(request):
 
 
 # 个人中心
+@login_required
 def personal(request):
-    return render(request, 'html/personal.html')
+    User_info = get_user_info(request)
+    print(f"{User_info.UserEmail}\n"
+          f"{User_info.UserName}\n"
+          f"{User_info.UserUsed}\n  ")
+
+
+    return render(request, 'html/personal.html', {'User_info': User_info})
 
 
 def index(request):  # 主页面
