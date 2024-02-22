@@ -19,12 +19,44 @@ video_dir = ''  # 视频保存缓冲区
 """
 海洋信息综合管理
 """
+# 更新用户文件夹的大小
+def update_folder_size(email, folder_name):
+    user_files = UserFile.objects.filter(email=email, folder_name=folder_name)
+    folder_size = 0
+    folder = None
+    for user_file in user_files:
+        if user_file.file_name == user_file.folder_name:
+            folder = user_file
+        else:
+            folder_size += user_file.file_size
+
+    if folder:
+        folder.file_size = folder_size
+        folder.save()
+        # print(f"文件夹{folder.folder_name}的大小已更新为{folder.file_size}字节")
+
+
 
 # 更新用户存储空间
-# def upgrate_storage(email):
-#     user_files = UserFile.objects.filter(email=email)
-#     for user_file in user_files:
-#         if user_file.file_name == user_file.folder_name:
+def update_storage(email):
+    user_files = UserFile.objects.filter(email=email)
+
+
+    user_info = CustomUser.objects.filter(email=email).first()
+    # 对用户的各个文件夹进行更新
+    for user_file in user_files:
+        if user_file.file_name == user_file.folder_name:
+            update_folder_size(email, user_file.folder_name)
+
+    user_storage = 0
+    user_files_ = UserFile.objects.filter(email=email)
+    for user_file_ in user_files_:
+        if user_file_.file_name == user_file_.folder_name:
+            user_storage += user_file_.file_size
+
+    if user_info:
+        user_info.already_use = user_storage
+        user_info.save()
 
 
 
@@ -33,7 +65,7 @@ def set_user_session(request):
     userinfo = CustomUser.objects.filter(email=request.user.email).first()
 
     # 用户已经使用百分比
-    percentage = userinfo.already_use / 1024 * 1024 * 1024 * userinfo.storage
+    percentage = userinfo.already_use / (1024 * 1024 * 1024 * userinfo.storage) * 100
     used, signal = calculate_bytes(userinfo.already_use)
     User_info = UserInfo(userinfo.username, userinfo.email, userinfo.storage, used, signal, percentage)
 
@@ -236,11 +268,11 @@ def user_logout(request):
 # 个人中心
 @login_required
 def personal(request):
+    update_storage(request.user.email)
+    set_user_session(request)
     User_info = get_user_info(request)
-    print(f"{User_info.UserEmail}\n"
-          f"{User_info.UserName}\n"
-          f"{User_info.UserUsed}\n  ")
 
+    print(User_info.UserPercentage)
 
     return render(request, 'html/personal.html', {'User_info': User_info})
 
