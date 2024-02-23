@@ -1,7 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
-from django.contrib.auth.models import User
-
+from django.contrib.auth import get_user_model
 
 class CustomUserManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
@@ -47,3 +46,23 @@ class UserFile(models.Model):
     file_size = models.PositiveIntegerField()
     upload_time = models.DateTimeField(auto_now_add=True)
     folder_name = models.CharField(max_length=255, blank=True, null=True)
+
+
+# 日志模型
+class UserActivity(models.Model):
+    user_email = models.EmailField()
+    login_count = models.PositiveIntegerField(default=0) # 登录次数
+    logout_count = models.PositiveIntegerField(default=0) # 登出次数
+    image_detect_count = models.PositiveIntegerField(default=0) # 图片识别次数
+    view_detect_count = models.PositiveIntegerField(default=0) # 视频检测次数
+    image_restructure_count = models.PositiveIntegerField(default=0) # 图像重构次数
+    llms_count = models.PositiveIntegerField(default=0) # 大模型使用次数
+    images_infosys_count = models.PositiveIntegerField(default=0) # 信息管理-图片使用次数
+    models_count = models.PositiveIntegerField(default=0) # 模型管理
+    research_count = models.PositiveIntegerField(default=0) # 研究次数
+    dataPreprocess_count = models.PositiveIntegerField(default=0) # 数据预处理
+
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.timestamp} - {self.user.email} - {self.user.username} - {self.action}"

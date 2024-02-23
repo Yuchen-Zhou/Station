@@ -24,8 +24,9 @@ class File:
 
 
 class Folder:
-    def __init__(self, name, file_type, size, upload_time):
+    def __init__(self, name, file_type, size, signal, upload_time):
         self.name = name
         self.file_type = file_type
         self.size = size
+        self.signal = signal
         self.upload_time = upload_time

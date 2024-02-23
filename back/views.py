@@ -1,6 +1,4 @@
-import os, time, json, sys, cv2, math
-import datetime
-
+import os, time, json, sys, cv2, math, datetime
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
@@ -8,64 +6,25 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.sessions.models import Session
 from django.db import transaction
 from django.conf import settings
-
 from .models import CustomUser, UserFile  # 导入自定义用户模型
 from back.utils import *
 from Modules import UserInfo, File, Folder
 
 detect_dir = ''  # 上传缓冲区
 video_dir = ''  # 视频保存缓冲区
+logger_ = logging.getLogger('user_info')
+
 
 """
 海洋信息综合管理
 """
-# 更新用户文件夹的大小
-def update_folder_size(email, folder_name):
-    user_files = UserFile.objects.filter(email=email, folder_name=folder_name)
-    folder_size = 0
-    folder = None
-    for user_file in user_files:
-        if user_file.file_name == user_file.folder_name:
-            folder = user_file
-        else:
-            folder_size += user_file.file_size
-
-    if folder:
-        folder.file_size = folder_size
-        folder.save()
-        # print(f"文件夹{folder.folder_name}的大小已更新为{folder.file_size}字节")
-
-
-
-# 更新用户存储空间
-def update_storage(email):
-    user_files = UserFile.objects.filter(email=email)
-
-
-    user_info = CustomUser.objects.filter(email=email).first()
-    # 对用户的各个文件夹进行更新
-    for user_file in user_files:
-        if user_file.file_name == user_file.folder_name:
-            update_folder_size(email, user_file.folder_name)
-
-    user_storage = 0
-    user_files_ = UserFile.objects.filter(email=email)
-    for user_file_ in user_files_:
-        if user_file_.file_name == user_file_.folder_name:
-            user_storage += user_file_.file_size
-
-    if user_info:
-        user_info.already_use = user_storage
-        user_info.save()
-
-
 
 # 设置用户session
 def set_user_session(request):
     userinfo = CustomUser.objects.filter(email=request.user.email).first()
 
     # 用户已经使用百分比
-    percentage = userinfo.already_use / (1024 * 1024 * 1024 * userinfo.storage) * 100
+    percentage = userinfo.already_use / (math.pow(1024, 3) * userinfo.storage) * 100
     used, signal = calculate_bytes(userinfo.already_use)
     User_info = UserInfo(userinfo.username, userinfo.email, userinfo.storage, used, signal, percentage)
 
@@ -79,7 +38,6 @@ def set_user_session(request):
     }
 
 
-
 # 获取用户基本信息
 def get_user_info(request):
     user_info_session = request.session.get('user_info')
@@ -89,12 +47,13 @@ def get_user_info(request):
 
     return User_info
 
+
 # 信息管理-图像管理
 @login_required
 def infoSys_userImages(request):
     set_user_session(request)
-
     User_info = get_user_info(request)
+    update_user_activity(request.user.email, action='images_infosys')
 
     # 对上传的文件进行处理
     if request.method == 'POST':
@@ -112,21 +71,16 @@ def infoSys_userImages(request):
                 for chunk in uploaded_file.chunks():
                     destination.write(chunk)
 
-            print(f"文件名：{uploaded_file.name}\n"
-                  f"文件类型：{uploaded_file.content_type}\n"
-                  f"文件大小：{uploaded_file.size}B")
-
             user_file = UserFile(
                 email=User_info.UserEmail,
                 file_name=uploaded_file.name,
                 file_type=uploaded_file.content_type,
                 file_size=uploaded_file.size,
-
                 upload_time=datetime.datetime.now(),
                 folder_name='海洋生物图像',
             )
             user_file.save()
-        return redirect('/infoSys/UserImages')  # 重定向到当前页面，刷新文件列表
+        return redirect('/infoSys')  # 重定向到当前页面，刷新文件列表
 
     files = []
     userfiles = UserFile.objects.filter(email=request.user.email, folder_name='海洋生物图像')
@@ -150,7 +104,7 @@ def infoSys(request):
     email = user.email
     user_folder = os.path.join(settings.MEDIA_ROOT, str(user.email))  # 根据用户ID创建用户文件夹路径
 
-    print(f"邮箱为{email}的用户，登录了海洋信息综合管理系统")
+    # print(f"邮箱为{email}的用户，登录了海洋信息综合管理系统")
 
     # 如果用户文件夹不存在，将创建创建用户文件夹以及海洋生物图像文件夹、海洋生态研究文献文件夹、目标检测模型文件夹
     user_folder = os.path.join(settings.MEDIA_ROOT, str(user.email))  # 根据用户ID创建用户文件夹路径
@@ -175,11 +129,12 @@ def infoSys(request):
     userfiles = UserFile.objects.filter(email=email)
     for userfile in userfiles:
         if userfile.file_name == userfile.folder_name:  # 判断是否为文件夹
+            size, signal = calculate_bytes(userfile.file_size)
             folder = Folder(name=userfile.file_name, file_type='文件夹',
-                            size=userfile.file_size, upload_time=userfile.upload_time)
+                            size=size, signal=signal, upload_time=userfile.upload_time)
             folders.append(folder)
 
-
+    update_storage(request.user.email)
     set_user_session(request)
     User_info = get_user_info(request)
 
@@ -199,14 +154,12 @@ def user_register(request):
         email = request.POST.get('email')
         password = request.POST.get('password')
 
-        print(f"username: {username}\n"
-              f"email: {email}\n"
-              f"password: {password}")
+
         # 验证数据有效性
         if not (username and email and password):
             return JsonResponse({'error': '请填写完整的注册信息'})
 
-        print(f'检查邮箱是否存在:{CustomUser.objects.filter(email=email).exists()}')
+        # print(f'检查邮箱是否存在:{CustomUser.objects.filter(email=email).exists()}')
         # 检查邮箱是否已经存在
         if CustomUser.objects.filter(email=email).exists():
             return JsonResponse({'error': '该用户邮箱已被注册'})
@@ -216,9 +169,15 @@ def user_register(request):
             with transaction.atomic():
                 user = CustomUser.objects.create_user(username=username, email=email, password=password)
                 user.save()
+
                 login(request, user)
+                set_user_session(request)
+                update_user_activity(email, action='login')
+
+                logger_.info(f"Username:{username}, UserEmail:{email}, UserPassword:{password}")
             return JsonResponse({'success': '注册成功，现在可以登录了'})
         except Exception as e:
+            log_error(email, action="注册")
             return JsonResponse({'error': f'注册失败：{str(e)}'})
 
     # 如果不是POST请求，返回登录页面
@@ -240,9 +199,13 @@ def user_login(request):
             # 登录成功，使用login方法登录用户
             login(request, user)
             set_user_session(request)
+
+            # 更新登录次数
+            update_user_activity(email, action='login')
             return JsonResponse({'success': '登录成功'})
         else:
             # 登录失败，返回错误信息
+            log_error(email, action='登录')
             return JsonResponse({'error': '邮箱或密码错误'})
     # 如果不是POST请求，返回登录页面
     return render(request, 'html/login.html')
@@ -254,14 +217,15 @@ def dashboard(request):
     current_user = request.user
     # 可以在这里使用current_user来获取当前登录用户的相关信息
     # 例如用户名、电子邮件地址等
-    print(f'这是当前登录的用户:{current_user.username}')
+    # print(f'这是当前登录的用户:{current_user.username}')
+    set_user_session(request)
     return render(request, 'html/dashboard.html', {'current_user': current_user})
 
 
 # 登出
 def user_logout(request):
     logout(request)
-    print(f"{request.user}登出")
+    update_user_activity(request.user.email, action='logout')
     return redirect('index')
 
 
@@ -272,7 +236,6 @@ def personal(request):
     set_user_session(request)
     User_info = get_user_info(request)
 
-    print(User_info.UserPercentage)
 
     return render(request, 'html/personal.html', {'User_info': User_info})
 
@@ -291,8 +254,10 @@ def sea_eyes(request):  # 海洋之眼跳转链接
     return render(request, 'html/sea_eyes.html')
 
 
+@login_required
 def uploadImages(request):  # 海洋之眼上传页面
     if request.method == 'POST':
+        update_user_activity(request.user.email, action='image_detect')
         # 获取上传文件
         uploaded_images = request.FILES.getlist('images')
 
@@ -315,7 +280,7 @@ def uploadImages(request):  # 海洋之眼上传页面
                 else:
                     counter += 1
                     new_upload_folder = f'{upload_folder}_{counter}/'  # 更新后缀数字
-            print(new_upload_folder)
+            # print(new_upload_folder)
             os.makedirs(new_upload_folder)
 
             writeImages(uploaded_images, new_upload_folder)
@@ -338,14 +303,16 @@ def detect_results(request):
 
 
 # 上传视频检测页面，一次只能检测一个上传并检测一个视频
+@login_required
 def uploadVideos(request):
     if request.method == 'POST':
+        update_user_activity(request.user.email, action='view_detect')
         uploaded_video = request.FILES.get('video')  # 只获取一个视频
         upload_folder = './back/upload/videos/'
 
-        print(str(uploaded_video))
+        # print(str(uploaded_video))
         video_path = os.path.join(upload_folder, str(uploaded_video))
-        print(video_path)
+        # print(video_path)
 
         if not os.path.exists(upload_folder):
             os.makedirs(upload_folder)
@@ -384,4 +351,5 @@ def video_show(request):
 
 
 def sea_llms(request):
+    update_user_activity(request.user.email, action='llms')
     return render(request, 'html/llms.html')

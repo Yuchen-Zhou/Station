@@ -29,7 +29,7 @@
                     {% else %}
                         <td>{{ folder.name }}</td>
                     {% endif %}
-                    <td>{{ folder.size }}B</td>
+                    <td>{{ folder.size }}{{ folder.signal }}</td>
                     <td>{{ folder.file_type }}</td>
                     <td>{{ folder.upload_time }}</td>
                     <!-- 其他文件信息 -->
