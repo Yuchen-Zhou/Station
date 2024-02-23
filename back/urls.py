@@ -10,6 +10,7 @@ urlpatterns = [
     path('logout/', views.user_logout, name='logout'),
     path('personal/', views.personal, name='personal'),
     path('dashboard', views.dashboard, name='dashboard'),
+    path('get_hardware_usage/', views.get_hardware_usage, name='get_hardware_usage'),
     path('infoSys', views.infoSys, name='infoSys'),
     path('infoSys/UserImages', views.infoSys_userImages, name='UserImages'),
     path('sea_eyes/', views.sea_eyes, name='sea_eyes'),

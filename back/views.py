@@ -1,4 +1,4 @@
-import os, time, json, sys, cv2, math, datetime
+import os, time, json, sys, cv2, math, datetime, psutil
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
@@ -14,10 +14,10 @@ detect_dir = ''  # 上传缓冲区
 video_dir = ''  # 视频保存缓冲区
 logger_ = logging.getLogger('user_info')
 
-
 """
 海洋信息综合管理
 """
+
 
 # 设置用户session
 def set_user_session(request):
@@ -138,7 +138,6 @@ def infoSys(request):
     set_user_session(request)
     User_info = get_user_info(request)
 
-
     return render(request, 'html/infoSys.html', {"folders": folders, "User_info": User_info})
 
 
@@ -153,7 +152,6 @@ def user_register(request):
         username = request.POST.get('username')
         email = request.POST.get('email')
         password = request.POST.get('password')
-
 
         # 验证数据有效性
         if not (username and email and password):
@@ -217,10 +215,25 @@ def dashboard(request):
     current_user = request.user
     # 可以在这里使用current_user来获取当前登录用户的相关信息
     # 例如用户名、电子邮件地址等
-    # print(f'这是当前登录的用户:{current_user.username}')
     set_user_session(request)
     return render(request, 'html/dashboard.html', {'current_user': current_user})
 
+
+def get_hardware_usage(request):
+    cpu_usage = psutil.cpu_percent()  # 获取cpu使用率
+    memory_info = psutil.virtual_memory()  # 获取内存情况
+    total_memory = memory_info.total
+    used_memory = memory_info.used
+    free_memory = memory_info.free
+
+    data = {
+        "cpu_percent": cpu_usage,
+        'total_memory': total_memory,
+        'used_memory': used_memory,
+        'free_memory': free_memory,
+    }
+
+    return JsonResponse(data)
 
 # 登出
 def user_logout(request):
@@ -235,7 +248,6 @@ def personal(request):
     update_storage(request.user.email)
     set_user_session(request)
     User_info = get_user_info(request)
-
 
     return render(request, 'html/personal.html', {'User_info': User_info})
 

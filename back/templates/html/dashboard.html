@@ -1,4 +1,83 @@
 {% extends 'html/base_dashboard.html' %}
 {% block title %}海洋视觉{% endblock %}
-{% block content %}<h1>欢迎来到基于深度学习的多维度海洋生态环境监测平台</h1>{%  endblock %}
+{% load static %}
+{% block otherstyle %}
+    <script src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
+    <link rel="stylesheet" href="{% static 'css/dashboard_.css' %}">
+{% endblock %}
+
 {% block top_name %}控制台{% endblock %}
+{% block content %}
+    <p>当前用户: {{ current_user.username }}</p>
+    <div class="chart-container">
+        <div id="cpu_chart" class="chart">
+            <div class="chart-title">CPU使用情况</div>
+        </div>
+        <div id="memory_chart" class="chart">
+            <div class="chart-title">内存使用情况</div>
+        </div>
+    </div>
+{% endblock %}
+
+
+{% block extrasrcipt %}
+    <script>
+        // 初始化 CPU 使用率图表
+        var cpuChart = echarts.init(document.getElementById('cpu_chart'));
+        var cpuOption = {
+            title: {
+                text: 'CPU使用率'
+            },
+            tooltip: {},
+            xAxis: {
+                data: []
+            },
+            yAxis: {},
+            series: [{
+                name: 'CPU Usage',
+                type: 'line',
+                data: []
+            }]
+        };
+
+        // 初始化内存使用情况图表（饼图）
+        var memoryChart = echarts.init(document.getElementById('memory_chart'));
+        var memoryOption = {
+            title: {
+                text: '内存使用情况'
+            },
+            tooltip: {},
+            series: [{
+                name: 'Memory Usage',
+                type: 'pie',
+                radius: '55%',
+                data: []
+            }]
+        };
+
+        // 更新硬件资源使用情况
+        function updateHardwareUsage() {
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    var data = JSON.parse(xhr.responseText);
+                    // 更新 CPU 使用率图表数据
+                    cpuOption.xAxis.data.push(new Date().toLocaleTimeString());
+                    cpuOption.series[0].data.push(data.cpu_percent);
+                    cpuChart.setOption(cpuOption);
+
+                    // 更新内存使用情况图表数据
+                    memoryOption.series[0].data = [
+                        {value: data.used_memory, name: '已使用的内存'},
+                        {value: data.free_memory, name: '空余内存'}
+                    ];
+                    memoryChart.setOption(memoryOption);
+                }
+            };
+            xhr.open("GET", "{% url 'get_hardware_usage' %}", true);
+            xhr.send();
+        }
+
+        setInterval(updateHardwareUsage, 1000);
+    </script>
+{% endblock %}
