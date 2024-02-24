@@ -216,7 +216,37 @@ def dashboard(request):
     # 可以在这里使用current_user来获取当前登录用户的相关信息
     # 例如用户名、电子邮件地址等
     set_user_session(request)
-    return render(request, 'html/dashboard.html', {'current_user': current_user})
+
+    return render(request, 'html/dashboard.html',
+                  {'current_user': current_user})
+
+# 获取用户存储信息
+def get_user_storage(request):
+    user_info = CustomUser.objects.filter(email=request.user.email).first()
+    already_used = user_info.already_use
+
+    used_gb = already_used / (1024 ** 3)
+    total_storage_gb = 5
+    user_storage = {
+        'used': round(used_gb, 4),
+        'unused': round(total_storage_gb - used_gb, 4),
+        'total': total_storage_gb
+    }
+
+    return JsonResponse(user_storage)
+
+
+# 获取用户的活动信息
+def get_user_activity_info(request):
+    user_data = UserActivity.objects.filter(user_email=request.user.email).first()
+
+    user_activity_info = {
+        "login_count": user_data.login_count,
+        "sea_eyes_count": user_data.image_detect_count + user_data.view_detect_count + user_data.image_restructure_count,
+        "llms_count": user_data.llms_count,
+        "infoSys_count": user_data.images_infosys_count + user_data.research_count + user_data.models_count
+    }
+    return JsonResponse(user_activity_info)
 
 
 def get_hardware_usage(request):
@@ -234,6 +264,7 @@ def get_hardware_usage(request):
     }
 
     return JsonResponse(data)
+
 
 # 登出
 def user_logout(request):

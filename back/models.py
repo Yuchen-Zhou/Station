@@ -65,4 +65,14 @@ class UserActivity(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.timestamp} - {self.user.email} - {self.user.username} - {self.action}"
+        return f"{self.timestamp} - {self.user_email} - " \
+               f"登录次数: {self.login_count}, " \
+               f"登出次数: {self.logout_count}, " \
+               f"图片识别次数: {self.image_detect_count}, " \
+               f"视频检测次数: {self.view_detect_count}, " \
+               f"图像重构次数: {self.image_restructure_count}, " \
+               f"大模型使用次数: {self.llms_count}, " \
+               f"信息管理-图片使用次数: {self.images_infosys_count}, " \
+               f"模型管理次数: {self.models_count}, " \
+               f"研究次数: {self.research_count}, " \
+               f"数据预处理次数: {self.dataPreprocess_count}"

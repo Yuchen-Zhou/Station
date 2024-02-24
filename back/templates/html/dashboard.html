@@ -1,15 +1,39 @@
 {% extends 'html/base_dashboard.html' %}
 {% block title %}海洋视觉{% endblock %}
 {% load static %}
+
 {% block otherstyle %}
     <script src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
     <link rel="stylesheet" href="{% static 'css/dashboard_.css' %}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 {% endblock %}
 
 {% block top_name %}控制台{% endblock %}
 {% block content %}
     <p>当前用户: {{ current_user.username }}</p>
-    <div class="chart-container">
+
+    <div class="links">
+        <a href="{% url 'upload_images' %}">图片识别</a>
+        <a href="{% url 'upload_videos' %}">视频检测</a>
+        <a href="#">图像重构</a>
+        <a href="{% url 'sea_llms' %}">大模型</a>
+        <a href="{% url 'infoSys' %}">海洋信息综合管理系统</a>
+        <!-- 添加更多链接 -->
+    </div>
+    <br>
+    <h2>用户基本信息</h2>
+    <div id="user_activity_analysis" class="chart-container">
+        <div id="user_activity_chart" class="chart" data-url="{% url 'get_user_activity_info' %}">
+            <div class="chart-title">用户活动情况</div>
+        </div>
+        <div id="user_storage_chart" class="chart" data-url="{% url 'get_user_storage' %}">
+            <div class="chart-title">用户存储使用情况</div>
+        </div>
+    </div>
+    <br>
+
+    <h2>硬件监控</h2>
+    <div id="hardware_usage" class="chart-container" data-url="{% url 'get_hardware_usage' %}">
         <div id="cpu_chart" class="chart">
             <div class="chart-title">CPU使用情况</div>
         </div>
@@ -21,63 +45,7 @@
 
 
 {% block extrasrcipt %}
-    <script>
-        // 初始化 CPU 使用率图表
-        var cpuChart = echarts.init(document.getElementById('cpu_chart'));
-        var cpuOption = {
-            title: {
-                text: 'CPU使用率'
-            },
-            tooltip: {},
-            xAxis: {
-                data: []
-            },
-            yAxis: {},
-            series: [{
-                name: 'CPU Usage',
-                type: 'line',
-                data: []
-            }]
-        };
-
-        // 初始化内存使用情况图表（饼图）
-        var memoryChart = echarts.init(document.getElementById('memory_chart'));
-        var memoryOption = {
-            title: {
-                text: '内存使用情况'
-            },
-            tooltip: {},
-            series: [{
-                name: 'Memory Usage',
-                type: 'pie',
-                radius: '55%',
-                data: []
-            }]
-        };
-
-        // 更新硬件资源使用情况
-        function updateHardwareUsage() {
-            var xhr = new XMLHttpRequest();
-            xhr.onreadystatechange = function () {
-                if (xhr.readyState == 4 && xhr.status == 200) {
-                    var data = JSON.parse(xhr.responseText);
-                    // 更新 CPU 使用率图表数据
-                    cpuOption.xAxis.data.push(new Date().toLocaleTimeString());
-                    cpuOption.series[0].data.push(data.cpu_percent);
-                    cpuChart.setOption(cpuOption);
-
-                    // 更新内存使用情况图表数据
-                    memoryOption.series[0].data = [
-                        {value: data.used_memory, name: '已使用的内存'},
-                        {value: data.free_memory, name: '空余内存'}
-                    ];
-                    memoryChart.setOption(memoryOption);
-                }
-            };
-            xhr.open("GET", "{% url 'get_hardware_usage' %}", true);
-            xhr.send();
-        }
-
-        setInterval(updateHardwareUsage, 1000);
-    </script>
+    <script src="{% static 'js/hardware_monitor.js' %}"></script>
+    <script src="{% static 'js/user_activity_analysis.js' %}"></script>
+    <script src="{% static 'js/user_storage.js' %}"></script>
 {% endblock %}

@@ -24,3 +24,21 @@
     font-size: 18px; /* 设置字体大小 */
     margin-bottom: 10px; /* 添加下边距 */
 }
+
+.links {
+    margin-top: 20px;
+}
+
+.links a {
+    display: inline-block;
+    margin-right: 10px;
+    padding: 5px 10px;
+    background-color: #007bff;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+.links a:hover {
+    background-color: #0056b3;
+}
