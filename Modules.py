@@ -1,5 +1,3 @@
-from datetime import datetime
-
 
 class UserInfo:
     def __init__(self, username, email, storage, used, used_signal, percentage):
@@ -30,3 +28,4 @@ class Folder:
         self.size = size
         self.signal = signal
         self.upload_time = upload_time
+

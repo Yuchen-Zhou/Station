@@ -1,10 +1,39 @@
 import os, time, json, sys, cv2, math, logging
-from Modules import  UserInfo
 from YOLOv8.DetectModel import YOLOv8DetectModel
 from moviepy.editor import VideoFileClip
 from .models import UserActivity, UserFile, CustomUser
+from Modules import  UserInfo
+
+from faker import Faker
+import random
+from tqdm import trange
+
 
 logger = logging.getLogger('user_activity')
+
+
+def simulate(num_users=10000, max_actions_per_user=20):
+    # 创建一个Faker对象
+    fake = Faker()
+
+    # 定义模拟的用户行为列表
+    actions = ['login', 'logout', 'image_detect', 'view_detect', 'image_restructure', 'llms',
+               'images_infosys', 'models_infosys', 'research_infosys', 'data_preprocess']
+
+    # 模拟生成指定数量的用户数据
+    for _ in trange(num_users, desc="Generating User Activities"):
+        email = fake.email()  # 生成随机的邮箱地址
+
+        # 生成随机行为次数
+        num_actions = random.randint(1, max_actions_per_user)
+
+        # 为每个用户生成随机次数的随机行为
+        for _ in range(num_actions):
+            # 随机选择一个数字作为行为的索引
+            action_index = random.randint(0, len(actions) - 1)
+            action = actions[action_index]  # 获取对应的行为
+            update_user_activity(email, action)  # 调用更新用户行为的函数
+
 
 def log_error(email, action):
     logger.error(f"邮箱为{email} - {action} 操作出现错误")
@@ -150,4 +179,7 @@ def detect_video(video_path):
 def convert_avi_to_mp4(input_path, output_path):
     clip = VideoFileClip(input_path)
     clip.write_videofile(output_path, codec='libx264', audio_codec='aac')
+
+
+from datetime import datetime
 

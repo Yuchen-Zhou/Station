@@ -1,0 +1,106 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-image: url('../img/dashboard.png'); /* 设置背景图片 */
+    background-size: cover; /* 使背景图片铺满整个页面 */
+    background-position: center; /* 将背景图片居中 */
+}
+
+
+/* 顶部导航栏样式 */
+.top-nav {
+    background-color: rgba(0, 0, 0, 0.7); /* 透明黑色背景 */
+    color: #fff;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1;
+    transition: background-color 0.3s; /* 添加过渡效果 */
+}
+
+.top-nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+}
+
+.top-nav ul li {
+    margin-right: 20px;
+    transition: transform 0.3s; /* 添加过渡效果 */
+}
+
+.top-nav ul li a {
+    color: #fff;
+    text-decoration: none;
+    transition: color 0.3s; /* 添加过渡效果 */
+}
+
+
+/* 侧边栏样式 */
+.sidebar {
+    background-color: rgba(255, 255, 255, 0.9); /* 设置背景颜色为白色，透明度为0.9 */
+    padding: 5px; /* 设置内边距 */
+    position: fixed; /* 将侧边栏固定定位 */
+    top: 50px; /* 设置距离顶部的距离 */
+    right: 0; /* 设置距离右侧的距离 */
+    width: 200px; /* 设置宽度 */
+    z-index: 1; /* 确保侧边栏在顶部导航栏下方 */
+    overflow-y: auto; /* 添加垂直滚动条 */
+    height: 400px;
+    border-radius: 10px; /* 添加圆角 */
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1); /* 添加阴影效果 */
+}
+
+.sidebar-nav {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+}
+
+.sidebar-nav li {
+    margin-bottom: 10px;
+}
+
+.sidebar-nav a {
+    text-decoration: none;
+    color: #333;
+}
+
+.sidebar-nav a:hover {
+    color: #007bff;
+}
+
+
+.container {
+    display: flex;
+    max-width: 1000px;
+    margin-top: 50px;
+    margin-left: 30px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1); /* 添加阴影效果 */
+    border-radius: 10px; /* 添加圆角 */
+    background-color: rgba(255, 255, 255, 0.9); /* 设置背景颜色为白色，透明度为0.9 */
+}
+
+.main-content {
+    flex: 3;
+    padding: 20px;
+    border-top-left-radius: 10px; /* 添加左上角圆角 */
+    border-bottom-left-radius: 10px; /* 添加左下角圆角 */
+}
+
+.custom-link {
+    color: blue; /* 设置链接文字颜色为蓝色 */
+    text-decoration: none; /* 去除链接的下划线 */
+    margin-right: 10px; /* 设置链接之间的右边距 */
+}
+
+.custom-link:hover {
+    text-decoration: underline; /* 鼠标悬停时显示下划线 */
+}

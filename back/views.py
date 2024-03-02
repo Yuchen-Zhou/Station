@@ -1,12 +1,10 @@
-import os, time, json, sys, cv2, math, datetime, psutil
+import datetime, psutil
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.sessions.models import Session
 from django.db import transaction
 from django.conf import settings
-from .models import CustomUser, UserFile  # 导入自定义用户模型
 from back.utils import *
 from Modules import UserInfo, File, Folder
 
@@ -268,8 +266,9 @@ def get_hardware_usage(request):
 
 # 登出
 def user_logout(request):
+    print(request.user.email)
+    update_user_activity(email=request.user.email, action='logout')
     logout(request)
-    update_user_activity(request.user.email, action='logout')
     return redirect('index')
 
 
@@ -286,6 +285,10 @@ def personal(request):
 def index(request):  # 主页面
     value = '欢迎来到基于深度学习的多维度海洋生态监测平台'
     return render(request, 'html/index.html', {"value": value})
+
+def about_us(request):
+
+    return render(request, 'html/about_us.html')
 
 
 """
