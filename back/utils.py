@@ -1,4 +1,4 @@
-import os, time, json, sys, cv2, math, logging
+import os, time, json, sys, cv2, math, logging, re
 from YOLOv8.DetectModel import YOLOv8DetectModel
 from moviepy.editor import VideoFileClip
 from .models import UserActivity, UserFile, CustomUser
@@ -12,13 +12,31 @@ from hdfs import InsecureClient
 
 logger = logging.getLogger('user_activity')
 
+# 分析日志数据
+def extract_logs_from_file(file_path):
+    logs = []
+    pattern = r'(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}),\d+ - INFO - 邮箱为 (\S+) 进行(.*)操作'
+    with open(file_path, 'r') as file:
+        for line in file:
+            matches = re.findall(pattern, line)
+            for match in matches:
+                log = {
+                    'time': match[0],
+                    'user': match[1],
+                    'operation': match[2]
+                }
+                logs.append(log)
+    return logs
+
+
+# 模拟日志数据
 def simulate(num_users=10000, max_actions_per_user=20):
     # 创建一个Faker对象
     fake = Faker()
 
     # 定义模拟的用户行为列表
     actions = ['login', 'logout', 'image_detect', 'view_detect', 'image_restructure', 'llms',
-               'images_infosys', 'models_infosys', 'research_infosys', 'data_preprocess']
+               'images_infosys', 'models_infosys', 'research_infosys']
 
     # 模拟生成指定数量的用户数据
     for _ in trange(num_users, desc="Generating User Activities"):
@@ -56,28 +74,25 @@ def update_user_activity(email, action):
         logger.info(f"邮箱为 {email} 退出登录")
     elif action == 'image_detect':
         user_activity.image_detect_count += 1
-        logger.info(f"邮箱为 {email} 进行了图片识别操作")
+        logger.info(f"邮箱为 {email} 图片识别")
     elif action == 'view_detect':
         user_activity.view_detect_count += 1
-        logger.info(f"邮箱为 {email} 进行了视频检测操作")
+        logger.info(f"邮箱为 {email} 视频检测")
     elif action == 'image_restructure':
         user_activity.image_restructure_count += 1
-        logger.info(f"邮箱为 {email} 进行了图像重构操作")
+        logger.info(f"邮箱为 {email} 图像重构")
     elif action == 'llms':
         user_activity.llms_count += 1
-        logger.info(f"邮箱为 {email} 使用了大模型")
+        logger.info(f"邮箱为 {email} 海洋语言模型")
     elif action == 'images_infosys':
         user_activity.images_infosys_count += 1
-        logger.info(f"邮箱为 {email} 进行海洋综合管理-海洋图像管理操作")
+        logger.info(f"邮箱为 {email} 海洋资源管理-海洋图像管理")
     elif action == 'models_infosys':
         user_activity.models_count += 1
-        logger.info(f"邮箱为 {email} 进行海洋综合管理-模型管理操作")
+        logger.info(f"邮箱为 {email} 海洋资源管理-模型管理")
     elif action == 'research_infosys':
         user_activity.research_count += 1
-        logger.info(f"邮箱为 {email} 进行海洋综合管理-文献管理操作")
-    elif action == 'data_preprocess':
-        user_activity.dataPreprocess_count += 1
-        logger.info(f"邮箱为 {email} 使用了数据预处理")
+        logger.info(f"邮箱为 {email} 海洋资源管理-生态研究")
 
 
     # 保存更新后的用户活动记录

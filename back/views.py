@@ -291,12 +291,10 @@ def index(request):  # 主页面
 def about_us(request):
     # 日志文件路径
     log_file_path = 'logs/user_activity.log'
-    # 在HDFS中的目标路径
-    hdfs_path = '/logs/'
-    # HDFS服务器地址和端口
-    hdfs_url = 'http://47.97.204.127:50070/'
 
-
+    logs = extract_logs_from_file(log_file_path)
+    for log in logs:
+        print(log)
 
     return render(request, 'html/about_us.html')
 
