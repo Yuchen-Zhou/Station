@@ -1,16 +1,20 @@
 import datetime, psutil
+import os.path
+
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.contrib.auth import authenticate, login, logout
 from django.db import transaction
 from django.conf import settings
 from back.utils import *
 from Modules import UserInfo, File, Folder
 
+
 detect_dir = ''  # 上传缓冲区
 video_dir = ''  # 视频保存缓冲区
 logger_ = logging.getLogger('user_info')
+
 
 """
 海洋信息综合管理
@@ -57,8 +61,6 @@ def infoSys_userImages(request):
     if request.method == 'POST':
         uploaded_files = request.FILES.getlist('files[]')
 
-        print('有图片上传')
-        print(uploaded_files)
         for uploaded_file in uploaded_files:
 
             user_path = os.path.join(settings.MEDIA_ROOT, User_info.UserEmail)  # 用户根路径
@@ -266,7 +268,6 @@ def get_hardware_usage(request):
 
 # 登出
 def user_logout(request):
-    print(request.user.email)
     update_user_activity(email=request.user.email, action='logout')
     logout(request)
     return redirect('index')
@@ -286,9 +287,20 @@ def index(request):  # 主页面
     value = '欢迎来到基于深度学习的多维度海洋生态监测平台'
     return render(request, 'html/index.html', {"value": value})
 
+# 关于我们
 def about_us(request):
+    # 日志文件路径
+    log_file_path = 'logs/user_activity.log'
+    # 在HDFS中的目标路径
+    hdfs_path = '/logs/'
+    # HDFS服务器地址和端口
+    hdfs_url = 'http://47.97.204.127:50070/'
+
+
 
     return render(request, 'html/about_us.html')
+
+
 
 
 """

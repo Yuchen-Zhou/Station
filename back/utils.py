@@ -7,10 +7,10 @@ from Modules import  UserInfo
 from faker import Faker
 import random
 from tqdm import trange
+from hdfs import InsecureClient
 
 
 logger = logging.getLogger('user_activity')
-
 
 def simulate(num_users=10000, max_actions_per_user=20):
     # 创建一个Faker对象
