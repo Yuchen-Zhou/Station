@@ -111,7 +111,7 @@ html {
 /* 内容区域的样式 */
 .content {
     margin-left: 50px; /* 调整边距以适应侧边栏 */
-    padding: 60px;
+    padding: 70px;
     transition: margin-left 0.5s; /* 内容区域左边距的过渡效果 */
     z-index: 1; /* 确保内容区域在侧边栏下方 */
     text-align: center; /* 文本居中 */

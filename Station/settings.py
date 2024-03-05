@@ -177,3 +177,13 @@ LOGGING = {
 }
 
 
+
+remote_file = '/root/autodl-tmp/AI-For_sea/upload'  # 远程服务器文件路径
+server_domain = 'region-41.seetacloud.com'  # 服务器域名
+server_port = 21775  # 服务器端口号
+username = 'root'  # 服务器用户名
+password = '71qS0pDvv9/T'  # 服务器密码
+
+
+
+

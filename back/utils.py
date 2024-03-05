@@ -1,16 +1,44 @@
-import os, time, json, sys, cv2, math, logging, re
+import os, time,  math, logging, re
 from YOLOv8.DetectModel import YOLOv8DetectModel
 from moviepy.editor import VideoFileClip
 from .models import UserActivity, UserFile, CustomUser
-from Modules import  UserInfo
-
+from Modules import UserInfo
 from faker import Faker
 import random
 from tqdm import trange
-from hdfs import InsecureClient
 
 
 logger = logging.getLogger('user_activity')
+
+
+
+# 创建日期文件夹
+def create_upload_folder(base_folder):
+    """
+    创建一个专属文件夹，命名规范为当前年月日加上上传次数后缀。
+
+    Args:
+        base_folder (str): 基础文件夹路径。
+
+    Returns:
+        str: 创建的文件夹路径。
+    """
+    dir_name = time.strftime('%Y-%m-%d', time.localtime())
+    upload_folder = os.path.join(base_folder, dir_name)
+
+    if not os.path.exists(upload_folder):
+        os.makedirs(upload_folder)
+        return upload_folder
+
+    counter = 1
+    while True:
+        new_upload_folder = f'{upload_folder}_{counter}/'
+        if not os.path.exists(new_upload_folder):
+            os.makedirs(new_upload_folder)
+            return new_upload_folder
+        else:
+            counter += 1
+
 
 # 分析日志数据
 def extract_logs_from_file(file_path):
@@ -182,8 +210,7 @@ def detect(imagefolder):
     for result in results:
         result.show()
     return results
-    # return redirect('sea_eyes/upload_images/detect_results', results)
-    #     return render(request, 'html/uploadImages.html', {'detection_results': results})
+
 
 def detect_video(video_path):
     model = YOLOv8DetectModel(mode='detect', img=video_path)

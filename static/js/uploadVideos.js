@@ -1,6 +1,6 @@
 $(document).ready(function() {
     $('#uploadButton').click(function() {
-        var files = $('#images')[0].files;
+        var files = $('#video')[0].files; // 修改文件输入框的ID为videos
         if (files.length === 0) {
             console.log('没有选择文件');
             return;
@@ -8,11 +8,11 @@ $(document).ready(function() {
 
         var formData = new FormData();
         for (var i = 0; i < files.length; i++) {
-            formData.append('images', files[i]);
+            formData.append('video', files[i]); // 修改键名为videos
         }
 
         $.ajax({
-            url: 'http://127.0.0.1:6006/imagesUpload',
+            url: 'http://127.0.0.1:6006/videoUpload', // 修改为视频上传接口的URL
             type: 'POST',
             data: formData,
             contentType: false,
@@ -22,23 +22,19 @@ $(document).ready(function() {
                 xhr.upload.addEventListener('progress', function(event) {
                     if (event.lengthComputable) {
                         var percentComplete = (event.loaded / event.total) * 100;
-                        $('#progressBar').width(percentComplete + '%');
-                        $('#progressText').text(percentComplete.toFixed(2) + '% 完成');
+                        $('#progressBar').width(percentComplete + '%'); // 修改进度条的ID为progressBar
+                        $('#progressText').text(percentComplete.toFixed(2) + '% 完成'); // 修改进度文本的ID为progressText
                     }
                 }, false);
                 return xhr;
             },
             success: function(response) {
-                console.log('检测完成:', response);
-                var folder_name = response.folder_name;
-                var results = response.results;
-
-                // 构建新页面的 URL，并将数据作为查询参数附加
-                var request_url = 'http://127.0.0.1:6006/images_results?folder_name=' + folder_name + '&results=' + JSON.stringify(results);
-                window.open(request_url);
+                console.log('上传成功:', response);
+                // 处理上传成功的响应数据
             },
             error: function(xhr, status, error) {
                 console.error('上传失败:', error);
+                // 处理上传失败的响应数据
             }
         });
     });

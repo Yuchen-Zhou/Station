@@ -1,0 +1,28 @@
+#uploadButton {
+    background-color: #2c3e50; /* 设置按钮的背景颜色为深邃的颜色 */
+    border: none;
+    color: white;
+    padding: 10px 20px; /* 设置按钮的内边距 */
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    transition-duration: 0.4s; /* 设置过渡效果的持续时间 */
+    border-radius: 8px; /* 设置按钮的圆角 */
+}
+
+#uploadButton:hover {
+    background-color: #34495e; /* 设置悬停时按钮的背景颜色为稍深的颜色 */
+}
+
+#progressText {
+    font-size: 20px; /* 设置文本的字体大小为更大的值 */
+    color: #333; /* 设置文本的颜色 */
+    transition-duration: 0.4s; /* 设置过渡效果的持续时间 */
+}
+
+#progressText:hover {
+    color: #666; /* 设置悬停时文本的颜色 */
+}

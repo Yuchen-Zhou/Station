@@ -11,79 +11,27 @@
 
     </style>
     <script src="{% static 'js/csrf.js' %}"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="{% static 'css/botton_text.css' %}">
+
 {% endblock %}
 {% block top_name %}海洋生物视频检测{% endblock %}
 
 {% block content %}
-    <form id="uploadForm" action="{% url 'upload_videos' %}" method="post" enctype="multipart/form-data">
+    <form id="uploadForm" enctype="multipart/form-data">
         {% csrf_token %}
-
-        <label for="video">选择要上传的视频:</label>
+        <label for="video">选择要上传的图片:</label>
         <input type="file" id="video" name="video" accept="video/*" required>
-        <br><br><br>
-
-        <div id="percent">0%</div>
-        <input type="button" value="上传视频" onclick="uploadVideo()" class="button">
-        <br><br><br>
-        <div id="progressBar">
-            <div id="progress"></div>
-        </div>
-        <button onclick="viewDetectResults()" class="button">查看检测结果</button>
+        <br><br>
+        <button type="button" id="uploadButton">上传</button>
     </form>
+
+    <!-- 进度文本 -->
+    <p id="progressText">0% 完成</p>
+    <div id="preview"></div>
+
 {% endblock %}
 {% block extrasrcipt %}
-    <script>
-        function uploadVideo() {
-            var input = document.getElementById('video');
-            var files = input.files;
-
-            // 创建FormData对象，用于将文件数据包装成表单数据
-            var formData = new FormData();
-
-            for (var i = 0; i < files.length; i++) {
-                var file = files[i];
-                // 将文件添加到FormData对象中
-                formData.append('video', file);
-            }
-
-            // 创建XMLHttpRequest对象
-            var xhr = new XMLHttpRequest();
-
-            // 配置请求
-            xhr.open('POST', '{% url 'upload_videos' %}', true);
-
-            // 上传进度回调
-            xhr.upload.onprogress = function (event) {
-                if (event.lengthComputable) {
-                    var percentComplete = (event.loaded / event.total) * 100;
-                    console.log('Upload Progress: ' + percentComplete + '%');
-
-                    // 更新上传进度到页面上的进度条
-                    document.getElementById('progress').style.width = percentComplete + '%';
-                    document.getElementById('percent').innerText = percentComplete.toFixed(2) + '%';
-                }
-            };
-
-            // 上传完成回调
-            xhr.onload = function () {
-                if (xhr.status === 200) {
-                    console.log('Upload successful!');
-                    // 在此处处理服务器返回的数据，可能是文件保存路径等
-                    var responseData = JSON.parse(xhr.responseText);
-                    document.getElementById('upload-message').innerText = responseData.message;
-                } else {
-                    console.error('Upload failed with status ' + xhr.status);
-                }
-            };
-
-            xhr.setRequestHeader('X-CSRFToken', document.getElementsByName('csrfmiddlewaretoken')[0].value);
-            // 发送请求
-            xhr.send(formData);
-        }
-
-        function viewDetectResults() {
-            window.location.href = "{% url 'video_show' %}"
-        }
-    </script>
+    <script src="{% static 'js/uploadVideos.js' %}"></script>
 
 {% endblock %}

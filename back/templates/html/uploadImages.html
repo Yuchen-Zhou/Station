@@ -3,25 +3,25 @@
 {% block title %}图片识别{% endblock %}
 {% block otherstyle %}
     <link rel="stylesheet" href="{% static 'css/uploadImages.css' %}">
-    <script src="{% static 'js/csrf.js' %}"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="{% static 'css/botton_text.css' %}">
 {% endblock %}
 {% block top_name %}海洋生物图片识别{% endblock %}
 
 {% block content %}
-    <form action="{% url 'upload_images' %}" method="post" enctype="multipart/form-data">
+    <form id="uploadForm" enctype="multipart/form-data">
         {% csrf_token %}
         <label for="images">选择要上传的图片:</label>
         <input type="file" id="images" name="images" accept="image/*" multiple required>
         <br><br>
-        <h2>
-            <span>{{ msg }}</span>
-        </h2>
-        <input type="submit" value="上传图片">
-        <input type="submit" onclick="viewDetectResults()" value="查看检测结果">
+        <button type="button" id="uploadButton">上传</button>
     </form>
 
+    <!-- 进度文本 -->
+    <p id="progressText">0% 完成</p>
     <div id="preview"></div>
 {% endblock %}
 {% block extrasrcipt %}
+    <script src="{% static 'js/preview.js' %}"></script>
     <script src="{% static 'js/uploadImages.js' %}"></script>
 {% endblock %}

@@ -1,4 +1,4 @@
-import datetime, psutil
+import datetime, psutil, requests
 import os.path
 
 from django.contrib.auth.decorators import login_required
@@ -310,43 +310,9 @@ def sea_eyes(request):  # 海洋之眼跳转链接
     return render(request, 'html/sea_eyes.html')
 
 
+
 @login_required
 def uploadImages(request):  # 海洋之眼上传页面
-    if request.method == 'POST':
-        update_user_activity(request.user.email, action='image_detect')
-        # 获取上传文件
-        uploaded_images = request.FILES.getlist('images')
-
-        # 为每一次上传创建一个专属文件夹
-        # 文件夹命名规范当前年月日➕第几次上传
-        dir_name = time.strftime('%Y-%m-%d', time.localtime())
-        upload_folder = './back/upload/images/' + dir_name
-
-        if not os.path.exists(upload_folder):
-            os.makedirs(upload_folder)
-            writeImages(uploaded_images, upload_folder)
-            global detect_dir
-            detect_dir = upload_folder
-        else:
-            counter = 1
-            while True:
-                new_upload_folder = f'{upload_folder}_{counter}/'
-                if not os.path.exists(new_upload_folder):
-                    break
-                else:
-                    counter += 1
-                    new_upload_folder = f'{upload_folder}_{counter}/'  # 更新后缀数字
-            # print(new_upload_folder)
-            os.makedirs(new_upload_folder)
-
-            writeImages(uploaded_images, new_upload_folder)
-
-            detect_dir = new_upload_folder
-            # detect(detect_dir)  # 检测
-
-        msg = "上传成功,点击查看检测结果"
-        return render(request, 'html/uploadImages.html', {'msg': msg})
-
     return render(request, 'html/uploadImages.html')
 
 
@@ -361,37 +327,6 @@ def detect_results(request):
 # 上传视频检测页面，一次只能检测一个上传并检测一个视频
 @login_required
 def uploadVideos(request):
-    if request.method == 'POST':
-        update_user_activity(request.user.email, action='view_detect')
-        uploaded_video = request.FILES.get('video')  # 只获取一个视频
-        upload_folder = './back/upload/videos/'
-
-        # print(str(uploaded_video))
-        video_path = os.path.join(upload_folder, str(uploaded_video))
-        # print(video_path)
-
-        if not os.path.exists(upload_folder):
-            os.makedirs(upload_folder)
-
-        with open(video_path, 'wb') as destination:
-            for chunk in uploaded_video.chunks():
-                destination.write(chunk)
-
-        # results = detect_video(video_path)
-        # for result in results:
-        #     save_dir = result.save_dir
-        #     result_json = result.tojson()
-        #
-        # filename, extension = os.path.splitext(str(uploaded_video))
-        # result_video = '/root/autodl-tmp/Station/' + save_dir + '/' + filename + '.avi'
-        #
-        # global video_dir
-        # video_dir = '/root/autodl-tmp/Station/media/videos/' + filename + '.mp4'
-        # convert_avi_to_mp4(result_video, video_dir)
-        # print(f'这是要保存的路径{video_dir}')
-        #
-        # msg = '上传成功'
-
     return render(request, 'html/upload_videos.html')
 
 
