@@ -1,0 +1,175 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="{% static 'css/base_infoSys.css' %}">
+    {% block otherstyle %}{% endblock %}
+
+</head>
+<body>
+<header class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#">
+        <img src="{% static 'img/info.png' %}">
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse justify-content-between" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="{% url 'infoSys' %}">海洋资源管理 <span
+                        class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'dashboard' %}">控制台</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">海洋视觉处理</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">海洋语言模型</a>
+            </li>
+
+        </ul>
+
+        <!-- 用户信息按钮 -->
+        <button type="button" class="btn btn-link user-avatar" id="popover-trigger">
+            <img src="{% static 'img/default_user.png' %}" alt="User Avatar" class="user-avatar" id="UserAvatar">
+            <span><a href="{% url 'personal' %}">{{ User_info.UserName }}</a></span>
+        </button>
+    </div>
+
+
+</header>
+
+<main class="container-fluid">
+    <div class="row">
+        <div class="col-md-3">
+            <!-- 上传按钮 -->
+            <button class="btn btn-primary mt-3" id="uploadButton">上传图片</button>
+            <input type="file" id="fileInput" style="display: none;" multiple>
+
+            <button class="btn btn-primary mt-3" id="uploadButton2">上传模型</button>
+            <input type="file" id="fileInput" style="display: none;" multiple>
+
+        </div>
+
+        <div class="col-md-9">
+            <div class="card">
+                <div class="card-header">
+                    {% block card_header %}{% endblock %}
+                </div>
+                <div class="card-body">
+                    <!-- 内容部分 -->
+                    {% block card_body %}{% endblock %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card-container">
+        <div class="card mt-3">
+            <div class="card-header2">
+                存储空间
+            </div>
+            <div class="card-body2">
+                已使用 {{ User_info.UserUsed }}{{ User_info.UserUsedSignal }}
+                / {{ User_info.UserStorage }}GB, {{ User_info.UserPercentage }}%
+                <div class="progress">
+                    <span class="sr-only">已完成</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</main>
+
+
+
+<footer class="footer">
+    <div class="container">
+        <p class="text-muted">
+            基于深度学习的多维度海洋生态监测平台-海洋信息综合管理
+        </p>
+    </div>
+</footer>
+
+{% block extra_script %}
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // 获取上传按钮和文件输入框
+            var uploadButton = document.getElementById("uploadButton");
+            var fileInput = document.getElementById("fileInput");
+
+            // 监听上传按钮点击事件
+            uploadButton.addEventListener("click", function () {
+                // 触发文件输入框的点击事件
+                fileInput.click();
+            });
+
+            // 监听文件输入框的change事件
+            fileInput.addEventListener("change", function () {
+                // 获取选中的文件列表
+                var files = fileInput.files;
+
+                // 创建FormData对象
+                var formData = new FormData();
+
+                // 将每个选中的文件添加到FormData中
+                for (var i = 0; i < files.length; i++) {
+                    formData.append("files[]", files[i]);
+                }
+
+                // 发送文件到后端处理
+                var xhr = new XMLHttpRequest();
+
+                // 获取CSRF token
+                var csrftoken = getCookie('csrftoken');
+
+                xhr.open("POST", "/infoSys/UserImages", true);
+
+                // 设置CSRF token
+                xhr.setRequestHeader('X-CSRFToken', csrftoken);
+
+                xhr.onload = function () {
+                    if (xhr.status === 200) {
+                        // 上传成功
+                        console.log("文件上传成功");
+                    } else {
+                        // 上传失败
+                        console.error("文件上传失败");
+                    }
+                };
+                xhr.send(formData);
+            });
+        });
+
+        // 获取 cookie 中的 CSRF token
+        function getCookie(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = cookies[i].trim();
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+    </script>
+
+{% endblock %}
+</body>
+</html>

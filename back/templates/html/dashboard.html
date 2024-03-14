@@ -1,4 +1,4 @@
-{% extends 'html/base_dashboard.html' %}
+{% extends 'html/../html_model/base_dashboard.html' %}
 {% block title %}海洋视觉{% endblock %}
 {% load static %}
 
@@ -16,7 +16,7 @@
         <a href="{% url 'upload_images' %}">图片识别</a>
         <a href="{% url 'upload_videos' %}">视频检测</a>
         <a href="#">图像重构</a>
-        <a href="{% url 'sea_llms' %}">大模型</a>
+        <a href="{% url 'tongyi_page' %}">通义大模型</a>
         <a href="{% url 'infoSys' %}">海洋信息综合管理系统</a>
         <!-- 添加更多链接 -->
     </div>

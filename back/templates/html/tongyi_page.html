@@ -1,0 +1,106 @@
+{% extends 'html/../html_model/base_dashboard.html' %}
+{% load static %}
+{% block title %}海洋大模型{% endblock %}
+{% block otherstyle %}
+    <link rel="stylesheet" href="{% static 'css/llms.css' %}">
+    <style>
+        .user-message, .ai-message {
+            font-size: 18px; /* 设置统一的字体大小 */
+            text-align: left;
+            margin-bottom: 5px;
+        }
+
+        /* 灰色按钮样式 */
+        .disabled-button {
+            background-color: #ccc;
+            color: #888;
+            cursor: not-allowed;
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.9.1/showdown.min.js"></script>
+{% endblock %}
+{% block top_name %}通义大模型{% endblock %}
+
+{% block content %}
+    <header>
+        <h1>欢迎来到通义</h1>
+    </header>
+    <div id="chat-container">
+        <div id="chat-log"></div>
+        <!-- 聊天输入框 -->
+        <div class="chat-input">
+            <div class="input-container">
+                <input type="text" id="user-input" placeholder="请输入你想要问的..." onkeydown="handleKeyDown(event)">
+                <!-- 添加灰色按钮样式 -->
+                <button id="send-button">发送</button>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block extrasrcipt %}
+    <script>
+        $(document).ready(function () {
+            $('#send-button').click(function () {
+                sendMessage();
+            });
+        });
+
+        function sendMessage() {
+            var userInput = $('#user-input').val();
+
+            // 显示用户输入
+            $('#chat-log').append('<div class="user-message">你: ' + userInput + '</div>');
+            // 禁用发送按钮
+            $('#send-button').prop('disabled', true);
+            // 添加灰色按钮样式
+            $('#send-button').addClass('disabled-button');
+            // 显示“正在生成中...”
+            $('#chat-log').append('<div id="loading-message" class="ai-message">通义大模型: 正在生成中...</div>');
+            // 滚动到底部
+            $('#chat-log').scrollTop($('#chat-log')[0].scrollHeight);
+
+            $.ajax({
+                url: "{% url 'tongyi' %}",
+                type: 'POST',
+                dataType: 'json',
+                data: JSON.stringify({'user_input': userInput}),
+                contentType: 'application/json',
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}' // 假设您使用 Django 的 CSRF 保护
+                },
+                success: function (data) {
+                    // 移除“正在生成中...”消息
+                    $('#loading-message').remove();
+                    // 创建 Showdown 实例
+                    var converter = new showdown.Converter();
+                    // 将 Markdown 转换为 HTML
+                    var html = converter.makeHtml(data.result);
+                    // 显示 AI 回复
+                    $('#chat-log').append('<div class="ai-message">通义大模型: ' + html + '</div>');
+                    // 启用发送按钮
+                    $('#send-button').prop('disabled', false);
+                    // 移除灰色按钮样式
+                    $('#send-button').removeClass('disabled-button');
+                    // 滚动到底部
+                    $('#chat-log').scrollTop($('#chat-log')[0].scrollHeight);
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error:', error);
+                }
+            });
+
+            // 清空输入框
+            $('#user-input').val('');
+        }
+
+        function handleKeyDown(event) {
+            // 检测按下的键是否是回车键
+            if (event.key === 'Enter') {
+                sendMessage(); // 执行发送消息的操作
+            }
+        }
+
+    </script>
+{% endblock %}

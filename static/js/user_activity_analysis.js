@@ -18,7 +18,7 @@ $(document).ready(function () {
                 },
                 xAxis: {
                     type: 'category',
-                    data: ['登录次数', '海洋之眼使用次数', '大模型使用次数', '信息管理使用次数']
+                    data: ['登录次数', '视觉', '语言', '资源']
                 },
                 yAxis: {
                     type: 'value'

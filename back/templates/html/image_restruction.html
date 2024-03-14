@@ -1,0 +1,73 @@
+{% extends 'html/../html_model/base_dashboard.html' %}
+{% load static %}
+{% block title %}图像重构{% endblock %}
+{% block otherstyle %}
+    <link rel="stylesheet" href="{% static 'css/uploadImages.css' %}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="{% static 'css/botton_text.css' %}">
+{% endblock %}
+{% block top_name %}海洋图像重构{% endblock %}
+
+{% block content %}
+    <form id="uploadForm" enctype="multipart/form-data">
+        {% csrf_token %}
+        <label for="images">选择要上传的图片:</label>
+        <input type="file" id="images" name="images" accept="image/*" multiple required>
+        <br><br>
+        <button type="button" id="uploadButton">上传</button>
+    </form>
+
+    <!-- 进度文本 -->
+    <p id="progressText">0% 完成</p>
+    <div id="preview"></div>
+
+    <!-- 显示返回的图片 -->
+    <div id="resultContainer"></div>
+{% endblock %}
+{% block extrasrcipt %}
+    <script>
+        $(document).ready(function () {
+            $('#uploadButton').click(function () {
+                var files = $('#images')[0].files;
+                if (files.length === 0) {
+                    console.log('没有选择文件');
+                    return;
+                }
+
+                var formData = new FormData();
+                for (var i = 0; i < files.length; i++) {
+                    formData.append('images', files[i]);
+                }
+
+                $.ajax({
+                    url: 'http://127.0.0.1:6006/imageRestruction',
+                    type: 'POST',
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    xhr: function () {
+                        var xhr = new window.XMLHttpRequest();
+                        xhr.upload.addEventListener('progress', function (event) {
+                            if (event.lengthComputable) {
+                                var percentComplete = (event.loaded / event.total) * 100;
+                                $('#progressBar').width(percentComplete + '%');
+                                $('#progressText').text(percentComplete.toFixed(2) + '% 完成');
+                            }
+                        }, false);
+                        return xhr;
+                    },
+                    success: function (response) {
+                        // 创建一个img标签，并设置src为返回的图片数据
+                        var img = $('<img src="data:image/png;base64,' + response + '">');
+                        // 将img标签添加到resultContainer中显示图片
+                        $('#resultContainer').html(img);
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('上传失败:', error);
+                    }
+                });
+            });
+        });
+
+    </script>
+{% endblock %}

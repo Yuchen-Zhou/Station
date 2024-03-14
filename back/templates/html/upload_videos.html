@@ -1,4 +1,4 @@
-{% extends 'html/base_dashboard.html' %}
+{% extends 'html/../html_model/base_dashboard.html' %}
 {% load static %}
 {% block title %}视频检测{% endblock %}
 {% block otherstyle %}
@@ -29,6 +29,8 @@
     <!-- 进度文本 -->
     <p id="progressText">0% 完成</p>
     <div id="preview"></div>
+    <p id="detectionStatus"></p>
+
 
 {% endblock %}
 {% block extrasrcipt %}

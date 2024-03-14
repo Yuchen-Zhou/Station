@@ -1,20 +1,86 @@
-{% extends 'html/base_dashboard.html' %}
+{% extends 'html/../html_model/base_dashboard.html' %}
+{% load static %}
 {% block title %}海洋视觉{% endblock %}
 {% block top_name %}海洋视觉{% endblock %}
+{% block otherstyle %}
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.9.1/showdown.min.js"></script>
+    <style>
+        .video-container {
+            position: relative;
+            width: 100%; /* 可根据需要调整宽度 */
+            max-width: 640px; /* 最大宽度，根据需要调整 */
+            margin: 0 auto; /* 水平居中 */
+            overflow: hidden; /* 视频超出容器部分隐藏 */
+        }
+
+        .video-container video {
+            width: 100%; /* 视频宽度占满容器 */
+            height: auto; /* 高度自适应 */
+        }
+
+        .function-button {
+            background-color: yellow; /* 设置按钮的背景颜色为深邃的颜色 */
+            border: none;
+            color: white;
+            padding: 10px 20px; /* 设置按钮的内边距 */
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            transition-duration: 0.4s; /* 设置过渡效果的持续时间 */
+            border-radius: 8px; /* 设置按钮的圆角 */
+        }
+
+        .function-button:hover {
+            background-color: #34495e; /* 设置悬停时按钮的背景颜色为稍深的颜色 */
+        }
+    </style>
+
+{% endblock %}
+
 
 {% block content %}
-    <h1>欢迎来到基于深度学习的海洋视觉平台</h1>
-    <p>海洋视觉是一个致力于海洋科学研究的平台，提供图片识别、视频检测和图像重构等功能。以下是一些示例图片：</p>
+    <h1>海洋视觉平台</h1>
+    <h2>图片识别：</h2>
+    <p>图片识别是指通过计算机视觉技术来识别海洋环境中的各种目标或特征。这可以包括识别海洋生物、船只、浮标、污染物等。其中使用的模型是
+        YOLOv8（You Only Look Once version 8）。
+        YOLOv8 是一种基于深度学习的目标检测算法，其核心思想是通过单个神经网络模型直接对图像进行端到端的检测和识别。相较于传统的目标检测算法，YOLO
+        系列算法具有检测速度快、准确度高等优点，适合实时场景下的目标识别任务。YOLOv8
+        在目标检测方面有较好的性能，可以有效地识别海洋环境中的各种目标。</p>
+
     <div class="image-container">
-        <img src="https://via.placeholder.com/150" alt="Sample Image 1">
-        <img src="https://via.placeholder.com/150" alt="Sample Image 2">
-        <img src="https://via.placeholder.com/150" alt="Sample Image 3">
+        <img src="{% static 'img/image_detect.png' %}" width="640" height="480" alt="Sample Image 1">
     </div>
+
+    <h2>视频检测：</h2>
+    <p>视频检测是指对海洋环境中的视频数据进行实时的目标检测和跟踪。这可以用于监测海洋生物的活动、船只的航行情况、海洋污染物的扩散等。视频检测所使用的模型依然是YOLOv8模型。
+        这种模型在处理海洋环境中的视频数据时，可以实现对目标的实时监测和跟踪，为海洋环境的管理和保护提供重要的数据支持。</p>
+
+    <div class="video-container">
+        <video controls>
+            <source src="{% static 'video/video_show.mp4' %}" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+
+    </div>
+
+    <h2>图像重构：</h2>
+    <p>
+        图像重构是通过对海洋环境中的图像数据进行处理，实现图像质量的提升或图像内容的修复。方法包括基于深度学习的图像修复算法，能够去除图像中的噪声、增强对比度、恢复缺失部分，提升图像清晰度和质量。</p>
+    <img src="{% static 'img/image_res.jpeg' %}" width="640" height="480">
+
+
 
     <div class="centered-container">
         <h1>请选择你要使用的功能: </h1>
-        <a href="{% url 'upload_images' %}" class="btn">图片识别</a>
-        <a href="{% url 'upload_videos' %}" class="btn">视频检测</a>
-        <a href="#" class="btn">图片识别</a>
+        <button class="function-button"><a href="{% url 'upload_images' %}">图片识别</a></button>
+        <button class="function-button"><a href="{% url 'upload_videos' %}">视频检测</a></button>
+        <button class="function-button"><a href="{% url 'image_res' %}">图像重构</a></button>
     </div>
+{% endblock %}
+{% block extrasrcipt %}
+
 {% endblock %}

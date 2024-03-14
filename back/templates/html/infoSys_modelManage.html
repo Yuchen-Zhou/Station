@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% extends 'html/../html_model/base_infoSys.html' %}
+{% load static %}
+{% block title %}海洋信息综合管理{% endblock %}
+
+{% block otherstyle %}
+    <link rel="stylesheet" href="{% static 'css/UserUpload.css' %}">
+{% endblock %}
+
+{% block card_header %}
+    我的文件系统: {{ User_info.UserEmail }}/海洋生物图像
+{% endblock %}
+{% block card_body %}
+    <div class="file-list-container">
+        <table class="file-table">
+            <thead>
+            <tr class="file-header">
+                <th>文件名</th>
+                <th>大小</th>
+                <th>类型</th>
+                <th>上传时间</th>
+                <th>所属文件夹</th>
+                <!-- 其他列名 -->
+            </tr>
+            </thead>
+            <tbody>
+            {% for file in files %}
+                <tr class="file-item">
+                    <td>{{ file.name }}</td>
+                    <td>{{ file.size }}{{ file.signal }}</td>
+                    <td>{{ file.file_type }}</td>
+                    <td>{{ file.upload_time }}</td>
+                    <td>{{ file.folder_name}}</td>
+                    <!-- 其他文件信息 -->
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+{% endblock %}
+
+{% block extrasrcipt %}
+
+{% endblock %}
+</title>
+</head>
+<body>
+
+</body>
+</html>

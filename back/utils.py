@@ -1,14 +1,61 @@
-import os, time,  math, logging, re
-from YOLOv8.DetectModel import YOLOv8DetectModel
-from moviepy.editor import VideoFileClip
+import os, time,  math, logging, re, random, dashscope
 from .models import UserActivity, UserFile, CustomUser
 from Modules import UserInfo
 from faker import Faker
-import random
+from http import HTTPStatus
 from tqdm import trange
 
 
 logger = logging.getLogger('user_activity')
+
+
+# 设置用户session
+def set_user_session(request):
+    userinfo = CustomUser.objects.filter(email=request.user.email).first()
+
+    # 用户已经使用百分比
+    percentage = userinfo.already_use / (math.pow(1024, 3) * userinfo.storage) * 100
+    used, signal = calculate_bytes(userinfo.already_use)
+    User_info = UserInfo(userinfo.username, userinfo.email, userinfo.storage, used, signal, percentage)
+
+    request.session['user_info'] = {
+        'userName': User_info.UserName,
+        'userEmail': User_info.UserEmail,
+        'userStorage': User_info.UserStorage,
+        'userUsed': User_info.UserUsed,
+        'userSignal': User_info.UserUsedSignal,
+        'userPercentage': User_info.UserPercentage
+    }
+
+
+# 获取用户基本信息
+def get_user_info(request):
+    user_info_session = request.session.get('user_info')
+
+    if user_info_session:
+        User_info = generate_userInfo(user_info_session)
+
+    return User_info
+
+
+
+# 通义大模型API
+def call_with_prompt(prompt):
+    response = dashscope.Generation.call(
+        model=dashscope.Generation.Models.qwen_turbo,
+        prompt=prompt,
+    )
+
+    # The response status_code is HTTPStatus.OK indicate success,
+    # otherwise indicate request is failed, you can get error code
+    # and message from code and message.
+    # if response.status_code == HTTPStatus.OK:
+    #     print(response.output['text'])  # The output text
+    #     print(response.usage)  # The usage information
+    # else:
+    #     print(response.code)  # The error code.
+    #     print(response.message)  # The error message.
+    return response.output
 
 
 
@@ -199,29 +246,4 @@ def writeImages(uploaded_images, upload_folder):
                 destination.write(chunk)
 
 
-# 对缓冲区文件夹内的图片进行目标检测任务
-def detect(imagefolder):
-    dir_path = '/root/autodl-tmp/Station/YOLOv8/'
-    mode = 'detect'
-    print(imagefolder)
-    model = YOLOv8DetectModel(mode, imagefolder)
-    results = model.detect()
-    print(results)
-    for result in results:
-        result.show()
-    return results
-
-
-def detect_video(video_path):
-    model = YOLOv8DetectModel(mode='detect', img=video_path)
-    results = model.detect_video()
-    return results
-
-
-def convert_avi_to_mp4(input_path, output_path):
-    clip = VideoFileClip(input_path)
-    clip.write_videofile(output_path, codec='libx264', audio_codec='aac')
-
-
-from datetime import datetime
 

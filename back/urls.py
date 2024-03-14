@@ -1,26 +1,34 @@
 from django.urls import path
-from django.conf.urls.static import static
-from django.conf import settings
-from . import views
+from .views import index as index_views
+from .views import users as users_views
+from .views import dashboard as dashboard_views
+from .views import sea_infosys as infosys_views
+from .views import sea_vision as vision_views
+from .views import sea_llms as llms_views
 
 urlpatterns = [
-    path('', views.index, name='index'),
-    path('about_us', views.about_us, name='about_us'),
-    # path('analyze_user_activity/', views.analyze_user_activity, name='analyze_user_activity'),
-    path('register/', views.user_register, name='register'),
-    path('login/', views.user_login, name='login'),
-    path('logout/', views.user_logout, name='logout'),
-    path('personal/', views.personal, name='personal'),
-    path('dashboard', views.dashboard, name='dashboard'),
-    path('dashboard/get_user_activity_info', views.get_user_activity_info, name='get_user_activity_info'),
-    path('dashboard/get_user_storage', views.get_user_storage, name='get_user_storage'),
-    path('get_hardware_usage/', views.get_hardware_usage, name='get_hardware_usage'),
-    path('infoSys', views.infoSys, name='infoSys'),
-    path('infoSys/UserImages', views.infoSys_userImages, name='UserImages'),
-    path('sea_eyes/', views.sea_eyes, name='sea_eyes'),
-    path('sea_eyes/upload_images', views.uploadImages, name='upload_images'),
-    path('sea_eyes/upload_videos', views.uploadVideos, name='upload_videos'),
-    path('sea_eyes/upload_images/detect_results', views.detect_results, name='detect_results'),
-    path('sea_eyes/upload_videos/video_show', views.video_show, name='video_show'),
-    path('sea_llm/', views.sea_llms, name='sea_llms'),
+    # 首页部分
+    path('', index_views.index, name='index'),
+    path('about_us', index_views.about_us, name='about_us'),
+    # 用户部分
+    path('register/', users_views.user_register, name='register'),
+    path('login/', users_views.user_login, name='login'),
+    path('logout/', users_views.user_logout, name='logout'),
+    path('personal/', users_views.personal, name='personal'),
+    # 控制台部分
+    path('dashboard', dashboard_views.dashboard, name='dashboard'),
+    path('dashboard/get_user_activity_info', dashboard_views.get_user_activity_info, name='get_user_activity_info'),
+    path('dashboard/get_user_storage', dashboard_views.get_user_storage, name='get_user_storage'),
+    path('get_hardware_usage/', dashboard_views.get_hardware_usage, name='get_hardware_usage'),
+    # 海洋资源管理
+    path('infoSys', infosys_views.infoSys, name='infoSys'),
+    path('infoSys/UserImages', infosys_views.infoSys_userImages, name='UserImages'),
+    # 海洋视觉处理
+    path('sea_eyes/', vision_views.sea_eyes, name='sea_eyes'),
+    path('sea_eyes/upload_images', vision_views.uploadImages, name='upload_images'),
+    path('sea_eyes/upload_videos', vision_views.uploadVideos, name='upload_videos'),
+    path('sea_eyes/image_restruction', vision_views.imageRestruction, name='image_res'),
+    # 海洋语言模型
+    path('tongyi/', llms_views.tongyi_page, name='tongyi_page'),
+    path('sea_llm/tongyi', llms_views.tongyi, name='tongyi')
 ]
