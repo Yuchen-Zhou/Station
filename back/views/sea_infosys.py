@@ -31,7 +31,7 @@ def infoSys_modelManage(request):
                     folder_name=userfile.folder_name)
         files.append(file)
 
-    return render(request, 'html/infoSys_modelManage.html', {'User_info': User_info, "files": files})
+    return render(request, 'sea_infoSys/infoSys_modelManage.html', {'User_info': User_info, "files": files})
 
 
 
@@ -79,7 +79,7 @@ def infoSys_userImages(request):
                     folder_name=userfile.folder_name)
         files.append(file)
 
-    return render(request, 'html/infoSys_userImages.html', {'User_info': User_info, "files": files})
+    return render(request, 'sea_infoSys/infoSys_userImages.html', {'User_info': User_info, "files": files})
 
 
 # 资源管理首页
@@ -123,4 +123,4 @@ def infoSys(request):
     set_user_session(request)
     User_info = get_user_info(request)
 
-    return render(request, 'html/infoSys.html', {"folders": folders, "User_info": User_info})
+    return render(request, 'sea_infoSys/infoSys.html', {"folders": folders, "User_info": User_info})

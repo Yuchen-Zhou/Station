@@ -4,7 +4,7 @@ from back.utils import extract_logs_from_file
 
 def index(request):  # 主页面
     value = '欢迎来到基于深度学习的海洋生态环境检测平台'
-    return render(request, 'html/index.html', {"value": value})
+    return render(request, 'indexs/index.html', {"value": value})
 
 # 关于我们
 def about_us(request):
@@ -15,4 +15,4 @@ def about_us(request):
     for log in logs:
         print(log)
 
-    return render(request, 'html/about_us.html')
+    return render(request, 'indexs/about_us.html')

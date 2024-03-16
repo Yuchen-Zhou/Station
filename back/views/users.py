@@ -46,7 +46,7 @@ def user_register(request):
             return JsonResponse({'error': f'注册失败：{str(e)}'})
 
     # 如果不是POST请求，返回登录页面
-    return render(request, 'html/register.html')
+    return render(request, 'users/register.html')
 
 
 def user_login(request):
@@ -73,7 +73,7 @@ def user_login(request):
             log_error(email, action='登录')
             return JsonResponse({'error': '邮箱或密码错误'})
     # 如果不是POST请求，返回登录页面
-    return render(request, 'html/login.html')
+    return render(request, 'users/login.html')
 
 
 # 登出
@@ -90,4 +90,4 @@ def personal(request):
     set_user_session(request)
     User_info = get_user_info(request)
 
-    return render(request, 'html/personal.html', {'User_info': User_info})
+    return render(request, 'html/../templates/users/personal.html', {'User_info': User_info})

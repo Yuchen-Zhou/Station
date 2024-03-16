@@ -13,7 +13,7 @@ def dashboard(request):
     # 例如用户名、电子邮件地址等
     set_user_session(request)
 
-    return render(request, 'html/dashboard.html',
+    return render(request, 'dashboards/dashboard.html',
                   {'current_user': current_user})
 
 # 获取用户存储信息

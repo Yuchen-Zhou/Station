@@ -11,7 +11,7 @@ from back.utils import *
 
 def tongyi_page(request):
     update_user_activity(request.user.email, action='llms')
-    return render(request, 'html/tongyi_page.html')
+    return render(request, 'html/../templates/llms/tongyi_page.html')
 
 
 
