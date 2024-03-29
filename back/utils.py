@@ -2,7 +2,6 @@ import os, time,  math, logging, re, random, dashscope
 from .models import UserActivity, UserFile, CustomUser
 from Modules import UserInfo
 from faker import Faker
-from http import HTTPStatus
 from tqdm import trange
 
 

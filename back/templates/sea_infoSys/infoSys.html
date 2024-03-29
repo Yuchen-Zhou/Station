@@ -1,4 +1,4 @@
-{% extends 'html/../html_model/base_infoSys.html' %}
+{% extends '../html_model/base_infoSys.html' %}
 {% load static %}
 {% block title %}海洋信息综合管理{% endblock %}
 
@@ -26,6 +26,10 @@
                 <tr class="file-item">
                     {% if folder.name == '海洋生物图像' %}
                         <td><a href="{% url 'UserImages' %}">{{ folder.name }}</a></td>
+                    {% elif folder.name == '目标检测模型' %}
+                        <td><a href="{% url 'UserModel' %}">{{ folder.name }}</a></td>
+                    {% elif folder.name == '海洋生态研究' %}
+                        <td><a href="#">{{ folder.name }}</a></td>
                     {% else %}
                         <td>{{ folder.name }}</td>
                     {% endif %}

@@ -2,7 +2,7 @@ from django.urls import path
 from .views import index as index_views
 from .views import users as users_views
 from .views import dashboard as dashboard_views
-from .views import sea_infosys as infosys_views
+from .views.Sea_infoSys import sea_infosys as infosys_views
 from .views import sea_vision as vision_views
 from .views import sea_llms as llms_views
 
@@ -23,6 +23,7 @@ urlpatterns = [
     # 海洋资源管理
     path('infoSys', infosys_views.infoSys, name='infoSys'),
     path('infoSys/UserImages', infosys_views.infoSys_userImages, name='UserImages'),
+    path('infoSys/UserModel', infosys_views.infoSys_modelManage, name='UserModel'),
     # 海洋视觉处理
     path('sea_eyes/', vision_views.sea_eyes, name='sea_eyes'),
     path('sea_eyes/upload_images', vision_views.uploadImages, name='upload_images'),

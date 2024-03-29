@@ -126,7 +126,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 # 设置根目录的静态资源文件夹
 STATICFILES_DIRS = [
-        os.path.join(BASE_DIR, 'static'),
+        os.path.join(BASE_DIR, 'back/static'),
         os.path.join(BASE_DIR, 'back/static')
     ]
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
