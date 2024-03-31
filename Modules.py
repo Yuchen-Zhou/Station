@@ -1,4 +1,3 @@
-
 class UserInfo:
     def __init__(self, username, email, storage, used, used_signal, percentage):
         self.UserName = username
@@ -7,6 +6,16 @@ class UserInfo:
         self.UserUsed = used
         self.UserUsedSignal = used_signal
         self.UserPercentage = percentage
+
+    def tojson(self):
+        return {
+            'username': self.UserName,
+            'email': self.UserEmail,
+            'storage': self.UserStorage,
+            'used': self.UserUsed,
+            'used_signal': self.UserUsedSignal,
+            'percentage': self.UserPercentage
+        }
 
 
 class File:
@@ -28,4 +37,3 @@ class Folder:
         self.size = size
         self.signal = signal
         self.upload_time = upload_time
-

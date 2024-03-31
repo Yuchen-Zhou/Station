@@ -216,7 +216,7 @@ def generate_userInfo(user_info_session):
     User_info = UserInfo(user_info_session['userName'], user_info_session['userEmail'],
                          user_info_session['userStorage'], user_info_session['userUsed'],
                          user_info_session['userSignal'], user_info_session['userPercentage'])
-    return User_info
+    return User_info.tojson()
 
 
 # 计算已经使用的文件大小

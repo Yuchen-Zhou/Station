@@ -8,13 +8,12 @@ from back.utils import *
 # 控制台页面
 @login_required
 def dashboard(request):
-    current_user = request.user
-    # 可以在这里使用current_user来获取当前登录用户的相关信息
-    # 例如用户名、电子邮件地址等
-    set_user_session(request)
+    if request.method == 'GET':
+        user_info = get_user_info(request)
+        print("收到请求")
+        print(user_info)
+        return JsonResponse(user_info)
 
-    return render(request, 'dashboards/dashboard.html',
-                  {'current_user': current_user})
 
 # 获取用户存储信息
 def get_user_storage(request):

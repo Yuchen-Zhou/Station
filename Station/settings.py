@@ -4,11 +4,11 @@ from pathlib import Path
 import logging
 
 import pymysql
+
 pymysql.install_as_MySQLdb()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
@@ -22,7 +22,6 @@ DEBUG = True
 ALLOWED_HOSTS = [
     '47.97.204.127', '127.0.0.1'
 ]
-
 
 # Application definition
 
@@ -38,20 +37,27 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    'django.middleware.security.SecurityMiddleware', #安全机制，保护用户与网站的通信安全
-    'django.contrib.sessions.middleware.SessionMiddleware', #会话Session功能
+    'django.middleware.security.SecurityMiddleware',  # 安全机制，保护用户与网站的通信安全
+    'django.contrib.sessions.middleware.SessionMiddleware',  # 会话Session功能
     # 添加中间件 LocalMiddleware
-    'django.middleware.locale.LocaleMiddleware', #国际化和本地化功能
-    'django.middleware.common.CommonMiddleware', #处理请求信息，规范化请求内容
+    'django.middleware.locale.LocaleMiddleware',  # 国际化和本地化功能
     'corsheaders.middleware.CorsMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware', #开启CSRF防护功能
-    'django.contrib.auth.middleware.AuthenticationMiddleware', #内置的用户认证系统
-    'django.contrib.messages.middleware.MessageMiddleware', #内置的信息提示功能
-    'django.middleware.clickjacking.XFrameOptionsMiddleware', #防止恶意程序单机劫持
+    'django.middleware.common.CommonMiddleware',  # 处理请求信息，规范化请求内容
+    # 'django.middleware.csrf.CsrfViewMiddleware',  # 开启CSRF防护功能
+    'django.contrib.auth.middleware.AuthenticationMiddleware',  # 内置的用户认证系统
+    'django.contrib.messages.middleware.MessageMiddleware',  # 内置的信息提示功能
+    # 'django.middleware.clickjacking.XFrameOptionsMiddleware',  # 防止恶意程序单机劫持
 ]
 
 AUTH_USER_MODEL = 'back.CustomUser'
 ROOT_URLCONF = 'Station.urls'
+
+CORS_ALLOW_ALL_ORIGINS = True  # 允许所有来源
+# CORS_ALLOWED_ORIGINS = [
+#     'http://127.0.0.1:8007',  # 允许的源
+#     # 其他允许的源...
+# ]
+
 
 TEMPLATES = [
     {
@@ -72,7 +78,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'Station.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
@@ -87,7 +92,6 @@ DATABASES = {
     },
 
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
@@ -107,7 +111,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 
@@ -121,18 +124,16 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
 # 设置根目录的静态资源文件夹
 STATICFILES_DIRS = [
-        os.path.join(BASE_DIR, 'back/static'),
-        os.path.join(BASE_DIR, 'back/static')
-    ]
+    os.path.join(BASE_DIR, 'back/static'),
+    os.path.join(BASE_DIR, 'back/static')
+]
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-
 
 # 设置媒体路由地址信息
 MEDIA_URL = '/media/'
@@ -140,8 +141,6 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 LOGIN_URL = 'login'
-
-
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
@@ -178,14 +177,8 @@ LOGGING = {
     },
 }
 
-
-
 remote_file = '/root/autodl-tmp/AI-For_sea/upload'  # 远程服务器文件路径
 server_domain = 'region-41.seetacloud.com'  # 服务器域名
 server_port = 21775  # 服务器端口号
 username = 'root'  # 服务器用户名
 password = '71qS0pDvv9/T'  # 服务器密码
-
-
-
-

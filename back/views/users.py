@@ -1,6 +1,7 @@
+import json
 import logging
 from django.shortcuts import render, redirect
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.contrib.auth import authenticate, login, logout
 from django.db import transaction
 from back.utils import update_user_activity, set_user_session, update_storage, get_user_info, log_error
@@ -50,9 +51,11 @@ def user_register(request):
 
 def user_login(request):
     if request.method == 'POST':
-        email = request.POST.get('email')
-        password = request.POST.get('password')
+        data = json.loads(request.body)
+        email = data.get('email')
+        password = data.get('password')
 
+        print(f"email: {email}, password: {password}")
         # 验证数据有效性
         if not (email and password):
             return JsonResponse({'error': '请填写完整的登录信息'})
@@ -63,17 +66,16 @@ def user_login(request):
             # 登录成功，使用login方法登录用户
             login(request, user)
             set_user_session(request)
+            user_info = get_user_info(request)
 
             # 更新登录次数
             update_user_activity(email, action='login')
-            return JsonResponse({'success': '登录成功'})
+            return JsonResponse({'success': '登录成功', 'user_info': user_info})
         else:
             # 登录失败，返回错误信息
             log_error(email, action='登录')
             return JsonResponse({'error': '邮箱或密码错误'})
-    # 如果不是POST请求，返回登录页面
-    return render(request, 'users/login.html')
-
+    return HttpResponse()
 
 # 登出
 def user_logout(request):
@@ -90,3 +92,11 @@ def personal(request):
     User_info = get_user_info(request)
 
     return render(request, 'html/../templates/users/personal.html', {'User_info': User_info})
+
+def check_login(request):
+    if request.user.is_authenticated:
+        # 用户已登录
+        return JsonResponse({'isLoggedIn': True})
+    else:
+        # 用户未登录
+        return JsonResponse({'isLoggedIn': False})

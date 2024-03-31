@@ -15,8 +15,9 @@ urlpatterns = [
     path('login/', users_views.user_login, name='login'),
     path('logout/', users_views.user_logout, name='logout'),
     path('personal/', users_views.personal, name='personal'),
+    path('api/check-login/', users_views.check_login, name='check_login'),
     # 控制台部分
-    path('dashboard', dashboard_views.dashboard, name='dashboard'),
+    path('dashboard/', dashboard_views.dashboard, name='dashboard'),
     path('dashboard/get_user_activity_info', dashboard_views.get_user_activity_info, name='get_user_activity_info'),
     path('dashboard/get_user_storage', dashboard_views.get_user_storage, name='get_user_storage'),
     path('get_hardware_usage/', dashboard_views.get_hardware_usage, name='get_hardware_usage'),
