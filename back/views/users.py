@@ -45,8 +45,7 @@ def user_register(request):
             log_error(email, action="注册")
             return JsonResponse({'error': f'注册失败：{str(e)}'})
 
-    # 如果不是POST请求，返回登录页面
-    return render(request, 'users/register.html')
+
 
 
 def user_login(request):
