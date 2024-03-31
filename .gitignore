@@ -30,3 +30,6 @@ vendor/
 
 media
 back/upload
+
+./Station/__pycache__
+./back/__pycache__
