@@ -1,0 +1,12 @@
+version: '3.8'
+services:
+  station:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8008:8008"
+    volumes:
+      - .:/Station
+    command: "python manage.py runserver 0.0.0.0:8008"
+

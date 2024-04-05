@@ -42,7 +42,7 @@ MIDDLEWARE = [
     # 添加中间件 LocalMiddleware
     'django.middleware.locale.LocaleMiddleware', #国际化和本地化功能
     'django.middleware.common.CommonMiddleware', #处理请求信息，规范化请求内容
-    'django.middleware.csrf.CsrfViewMiddleware', #开启CSRF防护功能
+    # 'django.middleware.csrf.CsrfViewMiddleware', #开启CSRF防护功能
     'django.contrib.auth.middleware.AuthenticationMiddleware', #内置的用户认证系统
     'django.contrib.messages.middleware.MessageMiddleware', #内置的信息提示功能
     'django.middleware.clickjacking.XFrameOptionsMiddleware', #防止恶意程序单机劫持
