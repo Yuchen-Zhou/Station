@@ -8,5 +8,20 @@ services:
       - "8008:8008"
     volumes:
       - .:/Station
-    command: "python manage.py runserver 0.0.0.0:8008"
+    command: "python manage.py makemigrations && python manage.py migrates&& python manage.py runserver 0.0.0.0:8008"
+    depends_on:
+      - mysql_db
+
+  mysql_db:
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: "zyc010804"
+      MYSQL_DATABASE: "station"
+      MYSQL_USER: "root"
+      MYSQL_PASSWORD: "zyc010804"
+    ports:
+      - "3306:3006"
+
+
 

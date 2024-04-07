@@ -40,7 +40,7 @@ class CustomUser(AbstractBaseUser):
         return self.email
 
 class UserFile(models.Model):
-    email = models.EmailField()
+    email = models.EmailField(primary_key=True)
     file_name = models.CharField(max_length=255)
     file_type = models.CharField(max_length=100)
     file_size = models.PositiveIntegerField()

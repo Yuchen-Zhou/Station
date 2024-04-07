@@ -80,7 +80,8 @@ DATABASES = {
         'NAME': 'station',
         'USER': 'root',
         'PASSWORD': 'zyc010804',
-        'HOST': '47.97.204.127',
+        # 'HOST': '47.97.204.127',
+        'HOST': '127.0.0.1',
         'PORT': '3306'
     },
 
